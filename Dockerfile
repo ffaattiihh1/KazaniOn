@@ -2,22 +2,17 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy gradle wrapper files first
-COPY KazaniOnBackend/gradlew KazaniOnBackend/gradlew.bat ./
-COPY KazaniOnBackend/gradle gradle
+# Copy entire KazaniOnBackend directory
+COPY KazaniOnBackend ./
 
-# Copy build files
-COPY KazaniOnBackend/build.gradle KazaniOnBackend/settings.gradle ./
-
-# Copy source code
-COPY KazaniOnBackend/src src
-
-# Make gradlew executable and build
+# Make gradlew executable
 RUN chmod +x gradlew
+
+# Build the application
 RUN ./gradlew build -x test
 
-# Port 8081
+# Expose port
 EXPOSE 8081
 
-# Run the jar file
+# Run the application
 ENTRYPOINT ["java", "-jar", "build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar"] 
