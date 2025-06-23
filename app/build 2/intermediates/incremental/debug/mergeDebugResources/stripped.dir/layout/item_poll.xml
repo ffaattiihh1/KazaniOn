@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/kazanion_light_gray"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewPollTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="Anket Başlığı" />
+
+        <TextView
+            android:id="@+id/textViewPollDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:text="Anket Açıklaması Buraya Gelecek" />
+
+        <TextView
+            android:id="@+id/textViewPollPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/kazanion_blue"
+            android:textStyle="bold"
+            android:text="Puan: 100" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonJoinPoll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:text="Ankete Katıl"
+            app:cornerRadius="8dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/kazanion_blue" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView> 

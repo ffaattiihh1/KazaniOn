@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="Theme.KazaniOn" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kazanion_blue</item>
+        <item name="colorPrimaryVariant">@color/kazanion_blue</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kazanion_blue</item>
+        <item name="colorSecondaryVariant">@color/kazanion_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/app_background_light</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/kazanion_blue</item>
+        <item name="colorControlActivated">@color/kazanion_blue</item>
+        <item name="colorControlNormal">@color/kazanion_blue</item>
+        <item name="colorAccent">@color/kazanion_blue</item>
+
+        <!-- Menü ikon rengi -->
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <!-- BottomNavigationView için özel tema overlay -->
+     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/bottom_nav_background_light</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSurface">@color/bottom_nav_background_light</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSecondary">@color/kazanion_blue</item> <!-- Seçili ikon rengi için mavi -->
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
+
+</resources>

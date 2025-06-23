@@ -1,0 +1,138 @@
+[
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/item_store_product.xml",
+        "source": "com.kazanion.app-main-85:/layout/item_store_product.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_achievement.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_achievement.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_location_poll_detail_bottom_sheet.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_location_poll_detail_bottom_sheet.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_cash_out.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_cash_out.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/item_poll.xml",
+        "source": "com.kazanion.app-main-85:/layout/item_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/dialog_invite.xml",
+        "source": "com.kazanion.app-main-85:/layout/dialog_invite.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_home.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_edit_profile.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_edit_profile.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_login.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_leaderboard.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_leaderboard.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_story_view.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_story_view.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/marker_price.xml",
+        "source": "com.kazanion.app-main-85:/layout/marker_price.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_explore.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_explore.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/item_location_poll.xml",
+        "source": "com.kazanion.app-main-85:/layout/item_location_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/activity_main.xml",
+        "source": "com.kazanion.app-main-85:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_store.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_store.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_achievements.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_achievements.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_wallet.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_wallet.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/item_story.xml",
+        "source": "com.kazanion.app-main-85:/layout/item_story.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_blog.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_blog.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_polls.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_nearby_polls.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_nearby_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_circle_button.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_circle_button.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/dialog_location_poll_detail.xml",
+        "source": "com.kazanion.app-main-85:/layout/dialog_location_poll_detail.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_invite.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_invite.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/dialog_poll_detail.xml",
+        "source": "com.kazanion.app-main-85:/layout/dialog_poll_detail.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_poll.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_location_poll_detail.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_location_poll_detail.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_registration.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_registration.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_map_polls.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_map_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/activity_splash.xml",
+        "source": "com.kazanion.app-main-85:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/list_item_map_poll.xml",
+        "source": "com.kazanion.app-main-85:/layout/list_item_map_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_profile.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.kazanion.app-mergeDebugResources-82:/layout/fragment_register.xml",
+        "source": "com.kazanion.app-main-85:/layout/fragment_register.xml"
+    }
+]

@@ -1,0 +1,1 @@
+[{"navFile":"src/main/res/navigation/mobile_navigation.xml","javaFiles":["com.kazanion.ui.login.LoginFragmentDirections","com.kazanion.ui.home.HomeFragmentDirections","com.kazanion.ui.profile.ProfileFragmentDirections","com.kazanion.ui.register.RegisterFragmentDirections","com.kazanion.ui.story.StoryViewFragmentArgs"]}]

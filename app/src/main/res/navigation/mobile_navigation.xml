@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.kazanion.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.kazanion.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_homeFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_withdrawFragment"
+            app:destination="@id/withdrawFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mapPollsFragment"
+            app:destination="@id/navigation_explore" />
+        <action
+            android:id="@+id/action_homeFragment_to_pollsFragment"
+            app:destination="@id/navigation_polls" />
+        <action
+            android:id="@+id/action_homeFragment_to_walletFragment"
+            app:destination="@id/navigation_wallet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/storeFragment"
+        android:name="com.kazanion.ui.store.StoreFragment"
+        android:label="Mağaza"
+        tools:layout="@layout/fragment_store" />
+
+    <fragment
+        android:id="@+id/withdrawFragment"
+        android:name="com.kazanion.ui.withdraw.WithdrawFragment"
+        android:label="Nakit Çek"
+        tools:layout="@layout/fragment_withdraw" />
+
+    <fragment
+        android:id="@+id/navigation_polls"
+        android:name="com.kazanion.ui.polls.PollsFragment"
+        android:label="Anketler"
+        tools:layout="@layout/fragment_polls" />
+
+    <fragment
+        android:id="@+id/navigation_explore"
+        android:name="com.kazanion.ui.mappolls.MapPollsFragment"
+        android:label="Keşfet"
+        tools:layout="@layout/fragment_map_polls" />
+
+    <fragment
+        android:id="@+id/navigation_achievements"
+        android:name="com.kazanion.ui.achievements.AchievementsFragment"
+        android:label="@string.title_achievements"
+        tools:layout="@layout/fragment_achievements">
+        <action
+            android:id="@+id/action_achievementsFragment_to_leaderboardFragment"
+            app:destination="@id/leaderboardFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="com.kazanion.ui.achievements.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.kazanion.ui.profile.ProfileFragment"
+        android:label="Profil"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_rankingFragment"
+            app:destination="@id/rankingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.kazanion.ui.register.RegisterFragment"
+        android:label="RegisterFragment">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rankingFragment"
+        android:name="com.kazanion.ui.ranking.RankingFragment"
+        android:label="Sıralama"
+        tools:layout="@layout/fragment_ranking" />
+
+    <fragment
+        android:id="@+id/storyViewFragment"
+        android:name="com.kazanion.ui.story.StoryViewFragment"
+        android:label="StoryViewFragment"
+        tools:layout="@layout/fragment_story_view">
+        <argument
+            android:name="storyTitle"
+            app:argType="string"
+            android:defaultValue="Duyuru" />
+        <argument
+            android:name="storyDescription"
+            app:argType="string"
+            android:defaultValue="Liderler Kazanıyor!" />
+        <argument
+            android:name="storyImageUrl"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_wallet"
+        android:name="com.kazanion.ui.wallet.WalletFragment"
+        android:label="Kazanç"
+        tools:layout="@layout/fragment_wallet" />
+
+    <fragment
+        android:id="@+id/cashOutFragment"
+        android:name="com.kazanion.ui.cashout.CashOutFragment"
+        android:label="Nakit Çek"
+        tools:layout="@layout/fragment_cash_out" />
+
+    <fragment
+        android:id="@+id/locationPollDetailFragment"
+        android:name="com.kazanion.ui.locationpoll.LocationPollDetailFragment"
+        android:label="Anket Detayı"
+        tools:layout="@layout/fragment_location_poll_detail" />
+
+</navigation> 

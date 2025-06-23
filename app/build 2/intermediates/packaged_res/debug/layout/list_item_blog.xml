@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    android:background="@drawable/code_background"
+    android:elevation="2dp">
+
+    <TextView
+        android:id="@+id/textViewBlogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Blog Başlığı"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/textViewBlogSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Blog özeti burada yer alacak..."
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"/>
+
+    <!-- Optional ImageView for blog post image -->
+    <ImageView
+        android:id="@+id/imageViewBlog"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_placeholder"
+        android:visibility="gone"
+        android:contentDescription="Blog Image" />
+
+    <TextView
+        android:id="@+id/textViewBlogDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="end"
+        android:text="15.07.2024"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"/>
+
+</LinearLayout> 

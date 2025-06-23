@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".PollsFragment">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/textViewPollsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/kazanion_blue"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:text="Anketler"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Filter Buttons -->
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewPollFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPollsHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutPollFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="8dp">
+
+            <Button
+                android:id="@+id/button_all_polls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tüm Anketler"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/kazanion_blue"
+                android:textColor="@color/white"
+                app:cornerRadius="999dp"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+            <Button
+                android:id="@+id/button_new_polls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yeni"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                app:cornerRadius="999dp"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+            <Button
+                android:id="@+id/button_ongoing_polls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Devam Eden"
+                android:layout_marginEnd="8dp"
+                 android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                app:cornerRadius="999dp"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+            <Button
+                android:id="@+id/button_completed_polls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tamamla"
+                 android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                app:cornerRadius="999dp"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Use a ScrollView for the content below buttons -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollViewPollFilters"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp">
+
+            <!-- Yeni Anketler Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yeni Anketler"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPolls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewNoPolls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Şu anda yeni anket bulunmamaktadır."
+                    android:textColor="@color/black"
+                    android:gravity="center"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Devam Eden Anketler Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Devam Eden Anketler"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+             <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Şu anda devam eden anket bulunmamaktadır."
+                    android:textColor="@color/black"
+                    android:gravity="center"/>
+             </androidx.cardview.widget.CardView>
+
+            <!-- Tamamlanan Anketler Section -->
+             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Tamamlanan Anketler"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+             <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Henüz tamamlanmış anket bulunmamaktadır."
+                    android:textColor="@color/black"
+                    android:gravity="center"/>
+             </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout> 

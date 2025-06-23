@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="app_background_light">#F5F5F5</color>
+    <color name="background">#121212</color>
+    <color name="black">#FF000000</color>
+    <color name="bottom_nav_background_light">#FFFFFF</color>
+    <color name="bronze">#CD7F32</color>
+    <color name="error">#CF6679</color>
+    <color name="gold">#FFD700</color>
+    <color name="gray">#808080</color>
+    <color name="gray_light">#EEEEEE</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="kazanion_blue">#2196F3</color>
+    <color name="kazanion_blue_light">#5C6BC0</color>
+    <color name="kazanion_dark">#1A1A1A</color>
+    <color name="kazanion_deep_space_blue">#1E3A4A</color>
+    <color name="kazanion_gold">#FFD700</color>
+    <color name="kazanion_gold_dark">#B8860B</color>
+    <color name="kazanion_gray">#CCCCCC</color>
+    <color name="kazanion_gray_dark">#666666</color>
+    <color name="kazanion_green">#4CAF50</color>
+    <color name="kazanion_light_gray">#F2F2F2</color>
+    <color name="kazanion_light_header">#E8EAF6</color>
+    <color name="kazanion_orange">#FF9800</color>
+    <color name="kazanion_pale_yellow">#FFFACD</color>
+    <color name="kazanion_purple">#9C27B0</color>
+    <color name="kazanion_red">#F44336</color>
+    <color name="kazanion_teal">#009688</color>
+    <color name="light_blue_100">#B3E5FC</color>
+    <color name="light_blue_200">#81D4FA</color>
+    <color name="light_blue_50">#E1F5FE</color>
+    <color name="light_blue_A100">#80D8FF</color>
+    <color name="primary">#FFD700</color>
+    <color name="primary_dark">#B8860B</color>
+    <color name="profile_gradient_end">#FFFFFF</color>
+    <color name="profile_gradient_start">#80D8FF</color>
+    <color name="red">#E53935</color>
+    <color name="secondary">#808080</color>
+    <color name="secondary_dark">#696969</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="story_seen_border">#9E9E9E</color>
+    <color name="story_unseen_border">#FF5722</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="top_bar_background_light">#FFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
+    <dimen name="story_border_width">2dp</dimen>
+    <string name="address">Adres</string>
+    <string name="already_have_account">Zaten hesabınız var mı?</string>
+    <string name="app_name">KazaniOn</string>
+    <string name="balance">Bakiye</string>
+    <string name="cancel">İptal</string>
+    <string name="change_photo">Fotoğrafı Değiştir</string>
+    <string name="choose_from_gallery">Galeriden Seç</string>
+    <string name="confirm_delete">Silmek istediğinize emin misiniz?</string>
+    <string name="confirm_logout">Çıkış yapmak istediğinize emin misiniz?</string>
+    <string name="confirm_password">Şifre Tekrar</string>
+    <string name="confirm_vote">Oyunuzu vermek istediğinize emin misiniz?</string>
+    <string name="confirm_withdraw">Para çekmek istediğinize emin misiniz?</string>
+    <string name="create_poll">Anket Oluştur</string>
+    <string name="default_web_client_id">194633260024-4mif2de8skg7bgcjl4p4cjt80b3m7bng.apps.googleusercontent.com</string>
+    <string name="delete">Sil</string>
+    <string name="dont_have_account">Hesabınız yok mu?</string>
+    <string name="earnings">Kazançlar</string>
+    <string name="edit">Düzenle</string>
+    <string name="edit_profile">Profili Düzenle</string>
+    <string name="email">E-posta</string>
+    <string name="end_time">Bitiş Saati</string>
+    <string name="error">Hata</string>
+    <string name="error_camera">Kamera erişimi reddedildi</string>
+    <string name="error_location">Konum alınamadı</string>
+    <string name="error_network">İnternet bağlantısı hatası</string>
+    <string name="error_server">Sunucu hatası</string>
+    <string name="error_storage">Depolama erişimi reddedildi</string>
+    <string name="error_unknown">Bilinmeyen bir hata oluştu</string>
+    <string name="forgot_password">Şifremi Unuttum</string>
+    <string name="friday">Cuma</string>
+    <string name="full_name">Ad Soyad</string>
+    <string name="gcm_defaultSenderId" translatable="false">194633260024</string>
+    <string name="google_api_key" translatable="false">AIzaSyBGZhjk-MuJIM8_8WE1w9oN02WzvFhH0Xk</string>
+    <string name="google_app_id" translatable="false">1:194633260024:android:365798c345752ace82540d</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBGZhjk-MuJIM8_8WE1w9oN02WzvFhH0Xk</string>
+    <string name="google_storage_bucket" translatable="false">kazanion-admin.firebasestorage.app</string>
+    <string name="home">Ana Sayfa</string>
+    <string name="invalid_email">Geçersiz e-posta adresi</string>
+    <string name="invalid_password">Geçersiz şifre</string>
+    <string name="invite_description">Arkadaşlarınızı davet edin ve kazançlarınızı artırın!</string>
+    <string name="invite_friends">Arkadaşlarını Davet Et</string>
+    <string name="invite_link">Davet Linki</string>
+    <string name="language">Dil</string>
+    <string name="leaderboard">Sıralama</string>
+    <string name="list_view">Liste Görünümü</string>
+    <string name="loading">Yükleniyor…</string>
+    <string name="location">Konum</string>
+    <string name="login">Giriş Yap</string>
+    <string name="login_with_apple">Apple ile Giriş Yap</string>
+    <string name="login_with_google">Google ile Giriş Yap</string>
+    <string name="logout">Çıkış Yap</string>
+    <string name="map_view">Harita Görünümü</string>
+    <string name="monday">Pazartesi</string>
+    <string name="my_polls">Anketlerim</string>
+    <string name="name">İsim</string>
+    <string name="nearby_polls">Yakındaki Anketler</string>
+    <string name="no_data">Veri Bulunamadı</string>
+    <string name="notification_new_poll">Yeni Anket</string>
+    <string name="notification_poll_ended">Anket Sona Erdi</string>
+    <string name="notification_reward">Ödül Kazandınız</string>
+    <string name="notification_system">Sistem Bildirimi</string>
+    <string name="notification_title">Bildirimler</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="ok">Tamam</string>
+    <string name="password">Şifre</string>
+    <string name="passwords_dont_match">Şifreler eşleşmiyor</string>
+    <string name="phone">Telefon</string>
+    <string name="poll_active">Aktif</string>
+    <string name="poll_category">Kategori</string>
+    <string name="poll_closed">Kapalı</string>
+    <string name="poll_deadline">Son Katılım Tarihi</string>
+    <string name="poll_description">Anket Açıklaması</string>
+    <string name="poll_ended">Sona Erdi</string>
+    <string name="poll_location">Konum</string>
+    <string name="poll_participants">Katılımcılar</string>
+    <string name="poll_report">Bildir</string>
+    <string name="poll_results">Sonuçlar</string>
+    <string name="poll_reward">Ödül</string>
+    <string name="poll_share">Paylaş</string>
+    <string name="poll_status">Durum</string>
+    <string name="poll_title">Anket Başlığı</string>
+    <string name="poll_vote">Oy Ver</string>
+    <string name="polls">Anketler</string>
+    <string name="privacy">Gizlilik</string>
+    <string name="profile">Profil</string>
+    <string name="project_id" translatable="false">kazanion-admin</string>
+    <string name="register">Kayıt Ol</string>
+    <string name="retry">Tekrar Dene</string>
+    <string name="saturday">Cumartesi</string>
+    <string name="save">Kaydet</string>
+    <string name="search">Ara</string>
+    <string name="settings">Ayarlar</string>
+    <string name="share">Paylaş</string>
+    <string name="start_time">Başlangıç Saati</string>
+    <string name="success">Başarılı</string>
+    <string name="success_poll_create">Anket başarıyla oluşturuldu</string>
+    <string name="success_profile_update">Profil başarıyla güncellendi</string>
+    <string name="success_vote">Oyunuz başarıyla kaydedildi</string>
+    <string name="success_withdraw">Para çekme işlemi başarılı</string>
+    <string name="sunday">Pazar</string>
+    <string name="take_photo">Fotoğraf Çek</string>
+    <string name="thursday">Perşembe</string>
+    <string name="title_home">Ana Sayfa</string>
+    <string name="title_invite">Davet</string>
+    <string name="title_polls">Anketler</string>
+    <string name="title_profile">Profil</string>
+    <string name="transaction_amount">Tutar</string>
+    <string name="transaction_date">Tarih</string>
+    <string name="transaction_history">İşlem Geçmişi</string>
+    <string name="transaction_status">Durum</string>
+    <string name="transaction_type">İşlem Türü</string>
+    <string name="tuesday">Salı</string>
+    <string name="username">Kullanıcı Adı</string>
+    <string name="wallet">Cüzdan</string>
+    <string name="wednesday">Çarşamba</string>
+    <string name="withdraw">Para Çek</string>
+    <string name="working_days">Çalışma Günleri</string>
+    <string name="working_hours">Çalışma Saatleri</string>
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="Kazanion.Widget.Button.OutlinedButton.BlackText" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Theme.KazaniOn" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        
+        <item name="colorPrimary">@color/kazanion_blue</item>
+        <item name="colorPrimaryVariant">@color/kazanion_blue</item>
+        <item name="colorOnPrimary">@color/black</item>
+        
+        <item name="colorSecondary">@color/kazanion_blue</item>
+        <item name="colorSecondaryVariant">@color/kazanion_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+        <item name="android:colorBackground">@color/app_background_light</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/kazanion_blue</item>
+        <item name="colorControlActivated">@color/kazanion_blue</item>
+        <item name="colorControlNormal">@color/kazanion_blue</item>
+        <item name="colorAccent">@color/kazanion_blue</item>
+
+        
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/bottom_nav_background_light</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSurface">@color/bottom_nav_background_light</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSecondary">@color/kazanion_blue</item> 
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/marker_price_text"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/marker_price_bg"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="50,00 TL"/>
+
+</LinearLayout> 

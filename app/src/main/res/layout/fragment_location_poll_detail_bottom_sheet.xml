@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bottom_sheet_handle"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Yuvarlak ikon -->
+        <FrameLayout
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/circle_light_gray"
+            android:layout_marginBottom="12dp">
+            <ImageView
+                android:id="@+id/imageIcon"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_book"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
+        <!-- Başlık -->
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Üçlü bilgi satırı -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:text="ÖDÜL"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/textReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/kazanion_blue"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:text="UZAKLIK"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/textDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/buttonShowOnMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Haritada Görüntüle"
+                    android:textColor="@color/kazanion_blue"
+                    android:textSize="13sp"
+                    android:backgroundTint="@color/white"
+                    android:background="@drawable/rounded_button_outline"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Adres satırı -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:id="@+id/textAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/gray"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+            <ImageView
+                android:id="@+id/buttonCopyAddress"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_copy"
+                android:contentDescription="Kopyala"
+                app:tint="@color/gray"
+                android:padding="4dp"/>
+        </LinearLayout>
+
+        <!-- Merhaba başlığı ve açıklama -->
+        <TextView
+            android:id="@+id/textHello"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Merhaba!"
+            android:textColor="@color/kazanion_blue"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/textDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Ziyaret adımları ve uyarı -->
+        <TextView
+            android:id="@+id/textSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ZİYARET ADIMLARI"
+            android:textColor="@color/kazanion_blue"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/textWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unutma, bu bir gizli müşteri çalışmasıdır. Kendini deşifre etmemelisin!"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Anketi Al Butonu -->
+        <Button
+            android:id="@+id/buttonTakePoll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Anketi Al"
+            android:backgroundTint="@color/kazanion_blue"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_button"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView> 

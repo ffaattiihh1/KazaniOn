@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Başlık"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textViewReward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50,00 TL"
+                android:textColor="@color/kazanion_blue"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/textViewDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22.62 KM UZAKTA"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Adres"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/kazanion_blue"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Açıklama"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/textViewSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[blue]ZİYARET ADIMLARI[/blue]\n1. ...\n2. ..."
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/textViewTips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[red]DİKKAT EDİLECEKLER[/red]\n- ..."
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/buttonTakePoll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Anketi Al"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/kazanion_blue"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp"/>
+    </LinearLayout>
+</ScrollView> 

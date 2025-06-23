@@ -1,0 +1,502 @@
+[
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_registration.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_registration.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_store.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_store.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_selector_map_toggle.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/selector_map_toggle.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_item_store_product.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/item_store_product.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_nearby_polls.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_nearby_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_explore.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_explore.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_circle_background_blue.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/circle_background_blue.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_dollar.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_dollar.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_item_poll.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/item_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_selector_view_toggle.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/selector_view_toggle.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_story_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/story_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_location_poll_detail_bottom_sheet.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_location_poll_detail_bottom_sheet.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable-v24_ic_launcher_round_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable-v24/ic_launcher_round_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_profile_gradient_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/profile_gradient_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_leaderboard.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_leaderboard.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-hdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/navigation_mobile_navigation.xml.flat",
+        "source": "com.kazanion.app-main-85:/navigation/mobile_navigation.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_orange_gradient_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/orange_gradient_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_blog.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_blog.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_edit.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_edit.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_circle_button.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_circle_button.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_statistics.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_statistics.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_money.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_money.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_test.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_test.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_profile.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_gift_box.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_gift_box.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_leaderboard.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_leaderboard.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_circle_light_gray.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/circle_light_gray.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_cash_out.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_cash_out.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_map_polls.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_map_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_arrow_right.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_arrow_right.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_book.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_book.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_achievement.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_achievement.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_bg_reward.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/bg_reward.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_wallet.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_wallet.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_map_selected.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_map_selected.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_help.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_help.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_list.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_list.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_language.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_language.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_achievements.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_achievements.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_earnings.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_earnings.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_register.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_register.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_polls.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_dialog_invite.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/dialog_invite.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_arrow_down.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_arrow_down.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_activity_main.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_home.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_home.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_list_selected.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_list_selected.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_kazanion_logo_placeholder.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/kazanion_logo_placeholder.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_marker_price_bg.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/marker_price_bg.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_edit_profile.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_edit_profile.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_facebook.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_facebook.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_marker_price.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/marker_price.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_card_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/card_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_sentiment.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_sentiment.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable-v24_ic_launcher_round_foreground.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable-v24/ic_launcher_round_foreground.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_privacy.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_privacy.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_dialog_location_poll_detail.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/dialog_location_poll_detail.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_google.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_google.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_item_story.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/item_story.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/xml_locales_config.xml.flat",
+        "source": "com.kazanion.app-main-85:/xml/locales_config.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_map_poll.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_map_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_rounded_button_outline.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/rounded_button_outline.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/xml_data_extraction_rules.xml.flat",
+        "source": "com.kazanion.app-main-85:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_home.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/xml_backup_rules.xml.flat",
+        "source": "com.kazanion.app-main-85:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_invite.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_invite.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_kazanion_logo.png.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_kazanion_logo.png"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_story_view.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_story_view.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_profile.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_profile.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_wallet.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_wallet.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_invite.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_invite.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_list_item_poll.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/list_item_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_map.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_map.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_store.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_store.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_location_poll_detail.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_location_poll_detail.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_ranking.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_ranking.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.kazanion.app-main-85:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_activity_splash.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_location.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_location.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_warning.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_warning.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_copy.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_copy.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_placeholder.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_placeholder.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_circle_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/circle_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_achievements.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_achievements.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_kazanion_logo_black.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/kazanion_logo_black.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_cash.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_cash.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_nearby_polls.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_nearby_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_splash_logo.png.flat",
+        "source": "com.kazanion.app-main-85:/drawable/splash_logo.png"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_gift.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_gift.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/xml_network_security_config.xml.flat",
+        "source": "com.kazanion.app-main-85:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_arrow_back.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_arrow_back.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_code_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/code_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_rounded_button.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/rounded_button.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-mdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_notifications.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_notifications.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_bottom_sheet_handle.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/bottom_sheet_handle.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_circle_button_background.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/circle_button_background.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_profile_header_gradient.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/profile_header_gradient.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_login.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_story_circle_border.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/story_circle_border.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_item_location_poll.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/item_location_poll.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_whatsapp.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_whatsapp.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_explore.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_explore.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_person.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_person.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.kazanion.app-main-85:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_fragment_polls.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/fragment_polls.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/drawable_ic_friends.xml.flat",
+        "source": "com.kazanion.app-main-85:/drawable/ic_friends.xml"
+    },
+    {
+        "merged": "com.kazanion.app-merged_res-83:/layout_dialog_poll_detail.xml.flat",
+        "source": "com.kazanion.app-main-85:/layout/dialog_poll_detail.xml"
+    }
+]

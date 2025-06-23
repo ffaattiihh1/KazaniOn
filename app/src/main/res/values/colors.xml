@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary colors -->
+    <color name="primary">#FFD700</color>
+    <color name="primary_dark">#B8860B</color>
+    
+    <!-- Secondary colors -->
+    <color name="secondary">#808080</color>
+    <color name="secondary_dark">#696969</color>
+    
+    <!-- Background colors -->
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    
+    <!-- System colors -->
+    <color name="error">#CF6679</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Custom Colors from Logo -->
+    <color name="kazanion_dark">#1A1A1A</color>
+    <color name="kazanion_gold">#FFD700</color>
+    <color name="kazanion_gold_dark">#B8860B</color>
+    <color name="kazanion_gray">#CCCCCC</color>
+    <color name="kazanion_gray_dark">#666666</color>
+
+    <!-- Circle Item Colors -->
+    <color name="kazanion_blue">#2196F3</color>
+    <color name="kazanion_green">#4CAF50</color>
+    <color name="kazanion_red">#F44336</color>
+    <color name="kazanion_purple">#9C27B0</color>
+    <color name="kazanion_orange">#FF9800</color>
+    <color name="kazanion_teal">#009688</color>
+    
+    <!-- Custom Orion Theme Color -->
+    <color name="kazanion_deep_space_blue">#1E3A4A</color>
+
+    <!-- Custom Light Gray Background Color -->
+    <color name="kazanion_light_gray">#F2F2F2</color>
+
+    <!-- Pale yellow for Polls page header and button -->
+    <color name="kazanion_pale_yellow">#FFFACD</color>
+
+    <!-- Added missing colors for profile page -->
+    <color name="kazanion_blue_light">#5C6BC0</color>
+    <color name="gray_light">#EEEEEE</color>
+
+    <!-- Color for the light header background in profile page -->
+    <color name="kazanion_light_header">#E8EAF6</color>
+
+    <color name="light_blue_50">#E1F5FE</color>
+    <color name="light_blue_100">#B3E5FC</color>
+    <color name="light_blue_200">#81D4FA</color>
+    <color name="light_blue_A100">#80D8FF</color>
+
+    <color name="gray">#808080</color>
+
+    <!-- Yeni renkler -->
+    <color name="app_background_light">#F5F5F5</color>
+    <color name="top_bar_background_light">#FFFFFF</color>
+    <color name="bottom_nav_background_light">#FFFFFF</color>
+    <color name="profile_gradient_start">#80D8FF</color> <!-- Açık mavi A100 -->
+    <color name="profile_gradient_end">#FFFFFF</color> <!-- Beyaz -->
+
+    <!-- Hikaye simgeleri renkleri -->
+    <color name="story_unseen_border">#FF5722</color> <!-- Koyu turuncu/kırmızı gibi belirgin bir renk -->
+    <color name="story_seen_border">#9E9E9E</color> <!-- Gri tonu -->
+
+    <color name="red">#E53935</color>
+    
+    <!-- Medal colors for leaderboard -->
+    <color name="gold">#FFD700</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="bronze">#CD7F32</color>
+</resources>

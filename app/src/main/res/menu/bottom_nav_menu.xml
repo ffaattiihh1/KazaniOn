@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="Ana Sayfa" />
+
+    <item
+        android:id="@+id/navigation_polls"
+        android:icon="@drawable/ic_polls"
+        android:title="Anketler" />
+
+    <item
+        android:id="@+id/navigation_explore"
+        android:icon="@drawable/ic_explore"
+        android:title="Keşfet" />
+
+    <item
+        android:id="@+id/navigation_achievements"
+        android:icon="@drawable/ic_achievements"
+        android:title="Başarımlar" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profil" />
+
+</menu> 
