@@ -1,10 +1,18 @@
-# Build JAR in Render
+# Build JAR in Render with debug
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
 # Copy source code
 COPY KazaniOnBackend/ ./
+
+# Debug: List files to see what was copied
+RUN ls -la
+RUN ls -la gradlew || echo "gradlew not found in root"
+RUN find . -name "gradlew" -type f
+
+# Make gradlew executable if it exists
+RUN chmod +x gradlew || echo "chmod failed, gradlew might not exist"
 
 # Build JAR
 RUN ./gradlew build -x test
