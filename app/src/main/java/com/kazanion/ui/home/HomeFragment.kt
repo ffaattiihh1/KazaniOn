@@ -112,8 +112,16 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.activePolls.observe(viewLifecycleOwner) { polls ->
+            android.util.Log.d("HomeFragment", "=== ACTIVE POLLS OBSERVER ===")
+            android.util.Log.d("HomeFragment", "Received polls count: ${polls?.size ?: 0}")
+            polls?.forEachIndexed { index, poll ->
+                android.util.Log.d("HomeFragment", "Poll $index: ${poll.title} - Link: ${poll.link}")
+            }
+            
             activePollsAdapter.submitList(polls)
             val hasActivePolls = !polls.isNullOrEmpty()
+            android.util.Log.d("HomeFragment", "hasActivePolls: $hasActivePolls")
+            android.util.Log.d("HomeFragment", "Setting activePollsCard visibility to: ${if (hasActivePolls) "VISIBLE" else "GONE"}")
             binding.activePollsCard.visibility = if (hasActivePolls) View.VISIBLE else View.GONE
         }
 

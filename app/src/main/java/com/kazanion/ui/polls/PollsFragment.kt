@@ -40,17 +40,27 @@ class PollsFragment : Fragment() {
     }
 
     private fun loadLinkPolls() {
+        android.util.Log.d("PollsFragment", "=== LOADING LINK POLLS ===")
         lifecycleScope.launch {
             try {
+                android.util.Log.d("PollsFragment", "Calling getActiveLinkPolls API...")
                 val polls = apiService.getActiveLinkPolls()
+                android.util.Log.d("PollsFragment", "Received polls count: ${polls.size}")
+                polls.forEachIndexed { index, poll ->
+                    android.util.Log.d("PollsFragment", "Poll $index: ${poll.title} - Link: ${poll.link}")
+                }
+                
                 pollsAdapter = PollsAdapter(polls)
                 binding.recyclerViewPolls.adapter = pollsAdapter
                 if (polls.isEmpty()) {
+                    android.util.Log.d("PollsFragment", "No polls found - showing empty view")
                     binding.cardViewNoPolls.visibility = View.VISIBLE
                 } else {
+                    android.util.Log.d("PollsFragment", "Polls found - hiding empty view")
                     binding.cardViewNoPolls.visibility = View.GONE
                 }
             } catch (e: Exception) {
+                android.util.Log.e("PollsFragment", "Error loading polls: ${e.message}", e)
                 // Hata yönetimi
                 binding.cardViewNoPolls.visibility = View.VISIBLE
             }

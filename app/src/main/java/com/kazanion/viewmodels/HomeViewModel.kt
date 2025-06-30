@@ -1,5 +1,6 @@
 package com.kazanion.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,14 +37,29 @@ class HomeViewModel : ViewModel() {
     val error: LiveData<String?> = _error
 
     fun loadAllData(username: String, forceRefresh: Boolean = false) {
+        Log.d("HomeViewModel", "=== STARTING loadAllData ===")
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                Log.d("HomeViewModel", "Making API calls...")
+                
                 // Paralel olarak tüm istekleri çalıştır
-                val storiesDeferred = async { apiService.getStories() }
-                val activePollsDeferred = async { apiService.getActiveLinkPolls() }
-                val locationPollsDeferred = async { apiService.getLocationBasedPolls() }
-                val userBalanceDeferred = async { apiService.getUserBalance(username) }
+                val storiesDeferred = async { 
+                    Log.d("HomeViewModel", "Calling getStories...")
+                    apiService.getStories() 
+                }
+                val activePollsDeferred = async { 
+                    Log.d("HomeViewModel", "Calling getActiveLinkPolls...")
+                    apiService.getActiveLinkPolls() 
+                }
+                val locationPollsDeferred = async { 
+                    Log.d("HomeViewModel", "Calling getLocationBasedPolls...")
+                    apiService.getLocationBasedPolls() 
+                }
+                val userBalanceDeferred = async { 
+                    Log.d("HomeViewModel", "Calling getUserBalance...")
+                    apiService.getUserBalance(username) 
+                }
 
                 // Tüm sonuçları bekle
                 val storiesResult = storiesDeferred.await()
@@ -51,13 +67,27 @@ class HomeViewModel : ViewModel() {
                 val locationPollsResult = locationPollsDeferred.await()
                 val userBalanceResult = userBalanceDeferred.await()
 
+                // Log results
+                Log.d("HomeViewModel", "Stories count: ${storiesResult.size}")
+                Log.d("HomeViewModel", "Active polls count: ${activePollsResult.size}")
+                Log.d("HomeViewModel", "Location polls count: ${locationPollsResult.size}")
+                Log.d("HomeViewModel", "User balance: $userBalanceResult")
+                
+                // Log active polls details
+                activePollsResult.forEachIndexed { index, poll ->
+                    Log.d("HomeViewModel", "Active Poll $index: ${poll.title} - Link: ${poll.link}")
+                }
+
                 // LiveData'ları güncelle
                 _stories.value = storiesResult
                 _activePolls.value = activePollsResult
                 _locationPolls.value = locationPollsResult
                 _userBalance.value = userBalanceResult
 
+                Log.d("HomeViewModel", "=== Data loaded successfully ===")
+
             } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error loading data: ${e.message}", e)
                 _error.value = "Veri yüklenirken bir hata oluştu: ${e.message}"
             } finally {
                 _isLoading.value = false

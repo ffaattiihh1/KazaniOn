@@ -1,0 +1,35 @@
+### Test Link Based Poll
+POST https://kazanion.onrender.com/api/polls
+Content-Type: application/json
+
+{
+  "title": "Android Test Anketi",
+  "description": "Bu bir test anketi!",
+  "points": 50,
+  "link": "https://forms.gle/example123",
+  "locationBased": false,
+  "isActive": true
+}
+
+### Test Location Based Poll  
+POST https://kazanion.onrender.com/api/polls
+Content-Type: application/json
+
+{
+  "title": "Konum Bazlı Test",
+  "description": "Bu bir konum bazlı anket!",
+  "points": 75,
+  "locationBased": true,
+  "latitude": 41.0082,
+  "longitude": 28.9784,
+  "isActive": true
+}
+
+### Get All Polls
+GET https://kazanion.onrender.com/api/polls
+
+### Get Active Link Polls  
+GET https://kazanion.onrender.com/api/polls/active/link
+
+### Get Location Based Polls
+GET https://kazanion.onrender.com/api/polls/location-based 
