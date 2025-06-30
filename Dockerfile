@@ -7,7 +7,7 @@ WORKDIR /app
 COPY experiments/admin2/package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy admin2 source code
 COPY experiments/admin2/ ./
