@@ -283,9 +283,10 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerViewActivePolls"
                             android:layout_width="match_parent"
-                            android:layout_height="360dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:nestedScrollingEnabled="false"
+                            android:maxHeight="300dp"
+                            android:nestedScrollingEnabled="true"
                             android:scrollbars="vertical"/>
 
                     </LinearLayout>

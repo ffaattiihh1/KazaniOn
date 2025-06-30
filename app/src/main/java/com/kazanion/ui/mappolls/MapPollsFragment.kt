@@ -179,20 +179,42 @@ class MapPollsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun updateMapMarkers() {
+        Log.d("MapPollsFragment", "updateMapMarkers called with ${polls.size} polls")
         googleMap?.clear()
         markerPollMap.clear()
+        var markersAdded = 0
         for (poll in polls) {
             if (poll.latitude != null && poll.longitude != null) {
                 val pollLocation = LatLng(poll.latitude, poll.longitude)
+                Log.d("MapPollsFragment", "Adding marker for poll: ${poll.title} at ${poll.latitude}, ${poll.longitude}")
                 val marker = googleMap?.addMarker(
                     MarkerOptions()
                         .position(pollLocation)
                         .title(poll.title)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        .snippet("${poll.points} puan")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                        .visible(true)
                 )
                 if (marker != null) {
                     markerPollMap[marker] = poll
+                    markersAdded++
+                    Log.d("MapPollsFragment", "Marker added successfully: ${marker.id}")
+                } else {
+                    Log.e("MapPollsFragment", "Failed to add marker for poll: ${poll.title}")
                 }
+            } else {
+                Log.w("MapPollsFragment", "Poll ${poll.title} has null coordinates: lat=${poll.latitude}, lng=${poll.longitude}")
+            }
+        }
+        Log.d("MapPollsFragment", "Total markers added: $markersAdded")
+        
+        // Zoom to Taksim if markers exist
+        if (markersAdded > 0 && polls.isNotEmpty()) {
+            val firstPoll = polls.first()
+            if (firstPoll.latitude != null && firstPoll.longitude != null) {
+                val taksim = LatLng(firstPoll.latitude, firstPoll.longitude)
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(taksim, 15f))
+                Log.d("MapPollsFragment", "Camera zoomed to first poll location")
             }
         }
     }
