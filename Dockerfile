@@ -3,17 +3,12 @@ FROM openjdk:17-jdk-slim AS builder
 
 WORKDIR /app
 
-# Copy Gradle wrapper and build files
-COPY KazaniOnBackend/gradle/ KazaniOnBackend/gradle/
-COPY KazaniOnBackend/gradlew KazaniOnBackend/gradlew
-COPY KazaniOnBackend/build.gradle KazaniOnBackend/build.gradle
-COPY KazaniOnBackend/settings.gradle KazaniOnBackend/settings.gradle
+# Copy everything from the repository
+COPY . .
 
-# Copy source code
-COPY KazaniOnBackend/src/ KazaniOnBackend/src/
-
-# Make gradlew executable and build JAR
-RUN cd KazaniOnBackend && chmod +x gradlew && ./gradlew build -x test
+# Build the backend project
+WORKDIR /app/KazaniOnBackend
+RUN chmod +x gradlew && ./gradlew build -x test
 
 # Runtime stage
 FROM openjdk:17-jdk-slim
