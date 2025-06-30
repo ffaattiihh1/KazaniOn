@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY experiments/admin2/package*.json ./
 
-# Install dependencies
-RUN npm install --omit=dev
+# Install dependencies and missing types
+RUN npm install --omit=dev && npm install --save-dev @types/leaflet
 
 # Copy source code
 COPY experiments/admin2/src ./src
