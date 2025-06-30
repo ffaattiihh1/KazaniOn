@@ -155,13 +155,25 @@ class MapPollsFragment : Fragment(), OnMapReadyCallback {
         Log.d("MapPollsFragment", "Loading location based polls...")
         lifecycleScope.launch {
             try {
+                Log.d("MapPollsFragment", "Making API call to getLocationBasedPolls...")
                 polls = apiService.getLocationBasedPolls()
-                Log.d("MapPollsFragment", "Polls loaded: "+polls.size)
+                Log.d("MapPollsFragment", "Polls loaded successfully: ${polls.size}")
+                polls.forEachIndexed { index, poll ->
+                    Log.d("MapPollsFragment", "Poll $index: ${poll.title} - Lat: ${poll.latitude}, Lng: ${poll.longitude}")
+                }
+                
+                Log.d("MapPollsFragment", "Updating adapter...")
                 mapPollsAdapter.updateData(polls, currentLocation?.latitude, currentLocation?.longitude)
+                
+                Log.d("MapPollsFragment", "Updating map markers...")
                 updateMapMarkers()
+                
+                Log.d("MapPollsFragment", "Location based polls loaded successfully!")
             } catch (e: Exception) {
-                Log.e("MapPollsFragment", "Network error", e)
-                Toast.makeText(context, "Ağ hatası: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("MapPollsFragment", "Error loading location based polls: ${e.javaClass.simpleName}", e)
+                Log.e("MapPollsFragment", "Error message: ${e.message}")
+                Log.e("MapPollsFragment", "Error stack trace: ${e.stackTrace.joinToString("\n")}")
+                Toast.makeText(context, "Anketler yüklenirken hata: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

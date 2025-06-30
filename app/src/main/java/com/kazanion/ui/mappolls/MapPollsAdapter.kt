@@ -31,7 +31,7 @@ class MapPollsAdapter(
             
             binding.pollDistance.text = distance
             binding.root.setOnClickListener { 
-                onItemClick?.invoke(poll, distance, poll.description ?: "")
+                onItemClick?.invoke(poll, distance, poll.description)
             }
         }
         
