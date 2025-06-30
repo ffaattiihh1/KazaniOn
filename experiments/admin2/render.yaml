@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: kazanion-admin
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REACT_APP_API_URL
+        value: https://kazanion.onrender.com/api 
