@@ -10,6 +10,7 @@ data class LocationPoll(
     val title: String,
     val description: String,
     val points: Int,
+    val link: String?,
     val latitude: Double?,
     val longitude: Double?,
     val isActive: Boolean,
