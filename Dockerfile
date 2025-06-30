@@ -1,24 +1,32 @@
-# Build JAR in Render with debug
+# Build JAR in Render - Fixed approach
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy source code
-COPY KazaniOnBackend/ ./
+# Copy entire project first
+COPY . .
 
-# Debug: List files to see what was copied
+# Debug: List all files
 RUN ls -la
-RUN ls -la gradlew || echo "gradlew not found in root"
-RUN find . -name "gradlew" -type f
+RUN ls -la KazaniOnBackend/
 
-# Make gradlew executable if it exists
-RUN chmod +x gradlew || echo "chmod failed, gradlew might not exist"
+# Change to backend directory
+WORKDIR /app/KazaniOnBackend
+
+# Verify gradlew exists now
+RUN ls -la gradlew
+
+# Make gradlew executable
+RUN chmod +x gradlew
 
 # Build JAR
 RUN ./gradlew build -x test
 
-# Move JAR to expected location
-RUN mv build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar app.jar
+# Copy JAR to /app
+RUN cp build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar /app/app.jar
+
+# Back to app directory
+WORKDIR /app
 
 # Expose port
 EXPOSE 8081
