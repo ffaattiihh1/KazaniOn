@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: kazanion-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: PORT
+        value: 8081
+    # Database environment variables will be set manually in Render dashboard
+
+databases:
+  - name: kazanion-db
+    plan: free
+    databaseName: kazaniondb
+    user: kazanionuser 

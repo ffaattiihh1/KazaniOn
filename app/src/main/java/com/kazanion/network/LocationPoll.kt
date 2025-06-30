@@ -10,9 +10,9 @@ data class LocationPoll(
     val title: String,
     val description: String,
     val points: Int,
-    val locationBased: Boolean,
     val latitude: Double?,
     val longitude: Double?,
     val isActive: Boolean,
-    val createdAt: String
+    val createdAt: String,
+    val locationBased: Boolean = true
 ) : Parcelable 

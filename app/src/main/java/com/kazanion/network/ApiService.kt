@@ -71,7 +71,7 @@ interface ApiService {
     suspend fun checkAchievements(@Path("userId") userId: Long): Map<String, String>
 
     companion object {
-        private const val BASE_URL = "http://192.168.1.105:8081/"
+        private const val BASE_URL = "http://192.168.1.104:8081/"
 
         fun create(): ApiService {
             val gson = GsonBuilder()
