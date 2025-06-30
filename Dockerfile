@@ -1,22 +1,26 @@
 # Multi-stage build for Render deployment
 FROM openjdk:17-jdk-slim AS builder
 
-WORKDIR /app
+WORKDIR /build
 
-# Copy everything from the repository
+# Copy the entire project
 COPY . .
 
-# Build the backend project
-WORKDIR /app/KazaniOnBackend
-RUN chmod +x gradlew && ./gradlew build -x test
+# List contents for debugging
+RUN ls -la
+RUN ls -la KazaniOnBackend/
+
+# Navigate to backend and build
+WORKDIR /build/KazaniOnBackend
+RUN chmod +x ./gradlew && ./gradlew build -x test
 
 # Runtime stage
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy the built JAR from builder stage
-COPY --from=builder /app/KazaniOnBackend/build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar app.jar
+# Copy the built JAR
+COPY --from=builder /build/KazaniOnBackend/build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port
 EXPOSE 8081
