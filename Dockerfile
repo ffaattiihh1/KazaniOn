@@ -1,16 +1,13 @@
 # Build stage
 FROM node:18-alpine as build
 
-WORKDIR /app
+# Copy the entire admin2 directory first
+COPY experiments/admin2 /app
 
-# Copy package files from admin2
-COPY experiments/admin2/package*.json ./
+WORKDIR /app
 
 # Install dependencies
 RUN npm install --omit=dev
-
-# Copy admin2 source code
-COPY experiments/admin2/ ./
 
 # Build the application
 RUN npm run build
