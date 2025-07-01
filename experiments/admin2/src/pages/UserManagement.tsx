@@ -3,13 +3,17 @@ import {
   Box, Button, Typography, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Paper, IconButton,
-  Chip, Card, CardContent, Grid
+  Chip, Card, CardContent, Grid, Alert, Snackbar, DialogContentText
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import StarsIcon from '@mui/icons-material/Stars';
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Person as PersonIcon,
+  Visibility as ViewIcon,
+  Add as AddIcon,
+  Remove as RemoveIcon,
+  Star as StarIcon
+} from '@mui/icons-material';
 
 const API_BASE_URL = 'https://kazanion.onrender.com/api';
 
@@ -22,6 +26,8 @@ interface User {
   points: number;
   balance: number;
   passwordHash: string;
+  phoneNumber?: string;
+  birthDate?: string;
 }
 
 const UserManagement = () => {
@@ -38,14 +44,22 @@ const UserManagement = () => {
     passwordHash: ''
   });
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+  
+  // Puan yönetimi state'leri
+  const [pointsDialogOpen, setPointsDialogOpen] = useState(false);
+  const [pointsChange, setPointsChange] = useState('');
+  const [pointsReason, setPointsReason] = useState('');
 
   useEffect(() => {
-    fetchUsers();
+    loadUsers();
   }, []);
 
-  const fetchUsers = async () => {
+  const loadUsers = async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/users`);
@@ -54,101 +68,178 @@ const UserManagement = () => {
     } catch (error) {
       console.error('Kullanıcılar çekilirken hata oluştu:', error);
       setError('Kullanıcılar yüklenirken hata oluştu');
+      setSnackbar({ 
+        open: true, 
+        message: 'Kullanıcılar yüklenirken hata oluştu', 
+        severity: 'error' 
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOpenDialog = (user?: User) => {
-    if (user) {
-      setSelectedUser(user);
-      setNewUser({
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        points: user.points,
-        balance: user.balance,
-        passwordHash: user.passwordHash
+  const handlePointsClick = (user: User) => {
+    setSelectedUser(user);
+    setPointsChange('');
+    setPointsReason('');
+    setPointsDialogOpen(true);
+  };
+
+  const handlePointsUpdate = async () => {
+    if (!selectedUser || !pointsChange || !pointsReason) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Tüm alanları doldurun!', 
+        severity: 'error' 
       });
-      setIsEditMode(true);
-    } else {
-      setSelectedUser(null);
-      setNewUser({
-        username: '',
-        email: '',
-        firstName: '',
-        lastName: '',
-        points: 0,
-        balance: 0.0,
-        passwordHash: ''
-      });
-      setIsEditMode(false);
+      return;
     }
-    setOpenDialog(true);
-  };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedUser(null);
-    setIsEditMode(false);
-  };
+    const pointsChangeNum = parseInt(pointsChange);
+    if (isNaN(pointsChangeNum)) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Geçerli bir puan değeri girin!', 
+        severity: 'error' 
+      });
+      return;
+    }
 
-  const handleSaveUser = async () => {
+    const newPoints = selectedUser.points + pointsChangeNum;
+    if (newPoints < 0) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Kullanıcı puanı 0\'dan az olamaz!', 
+        severity: 'error' 
+      });
+      return;
+    }
+
     try {
-      setLoading(true);
-      let response;
-      
-      if (isEditMode && selectedUser) {
-        // Update existing user
-        response = await fetch(`${API_BASE_URL}/users/${selectedUser.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newUser),
-        });
-      } else {
-        // Create new user
-        response = await fetch(`${API_BASE_URL}/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newUser),
-        });
-      }
+      const response = await fetch(`${API_BASE_URL}/users/${selectedUser.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: selectedUser.username,
+          email: selectedUser.email,
+          firstName: selectedUser.firstName,
+          lastName: selectedUser.lastName,
+          phoneNumber: selectedUser.phoneNumber,
+          birthDate: selectedUser.birthDate,
+          points: newPoints,
+          balance: selectedUser.balance,
+          passwordHash: selectedUser.passwordHash
+        }),
+      });
 
       if (response.ok) {
-        fetchUsers();
-        handleCloseDialog();
+        setSnackbar({ 
+          open: true, 
+          message: `${selectedUser.username} kullanıcısının puanı güncellendi (${pointsChangeNum > 0 ? '+' : ''}${pointsChangeNum})`, 
+          severity: 'success' 
+        });
+        loadUsers();
       } else {
-        setError('Kullanıcı kaydedilirken hata oluştu');
+        throw new Error('Puan güncelleme başarısız');
       }
     } catch (error) {
-      console.error('Kullanıcı kaydedilirken hata:', error);
-      setError('Kullanıcı kaydedilirken hata oluştu');
-    } finally {
-      setLoading(false);
+      console.error('Puan güncellenirken hata:', error);
+      setSnackbar({ 
+        open: true, 
+        message: 'Puan güncellenirken hata oluştu', 
+        severity: 'error' 
+      });
     }
+
+    setPointsDialogOpen(false);
+    setSelectedUser(null);
+    setPointsChange('');
+    setPointsReason('');
   };
 
-  const handleDeleteUser = async (userId: number) => {
-    if (window.confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+  const handleDeleteClick = (user: User) => {
+    setSelectedUser(user);
+    setDeleteDialogOpen(true);
+    setConfirmText('');
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedUser || confirmText !== selectedUser.username) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Doğrulama metni hatalı!', 
+        severity: 'error' 
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/${selectedUser.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setSnackbar({ 
+          open: true, 
+          message: `${selectedUser.username} kullanıcısı başarıyla silindi`, 
+          severity: 'success' 
+        });
+        loadUsers();
+      } else {
+        throw new Error('Silme işlemi başarısız');
+      }
+    } catch (error) {
+      console.error('Kullanıcı silinirken hata:', error);
+      setSnackbar({ 
+        open: true, 
+        message: 'Kullanıcı silinirken hata oluştu', 
+        severity: 'error' 
+      });
+    }
+
+    setDeleteDialogOpen(false);
+    setSelectedUser(null);
+    setConfirmText('');
+  };
+
+  const handleDeleteTestUsers = async () => {
+    const testUsers = users.filter(user => 
+      user.username.includes('test') || 
+      user.username.includes('debug') || 
+      user.username === 'yeni_kullanici'
+    );
+
+    if (testUsers.length === 0) {
+      setSnackbar({ 
+        open: true, 
+        message: 'Silinecek test kullanıcısı bulunamadı', 
+        severity: 'success' 
+      });
+      return;
+    }
+
+    try {
+      for (const user of testUsers) {
+        await fetch(`${API_BASE_URL}/users/${user.id}`, {
           method: 'DELETE',
         });
-
-        if (response.ok) {
-          fetchUsers();
-        } else {
-          setError('Kullanıcı silinirken hata oluştu');
-        }
-      } catch (error) {
-        console.error('Kullanıcı silinirken hata:', error);
-        setError('Kullanıcı silinirken hata oluştu');
       }
+      
+      setSnackbar({ 
+        open: true, 
+        message: `${testUsers.length} test kullanıcısı silindi`, 
+        severity: 'success' 
+      });
+      loadUsers();
+    } catch (error) {
+      console.error('Test kullanıcıları silinirken hata:', error);
+      setSnackbar({ 
+        open: true, 
+        message: 'Test kullanıcıları silinirken hata oluştu', 
+        severity: 'error' 
+      });
     }
   };
 
@@ -162,10 +253,59 @@ const UserManagement = () => {
     }
   };
 
-  const getActivityStatus = (user: User) => {
-    // Basit aktiflik kontrolü - puanı 0'dan fazla olanlar aktif sayılsın
-    return user.points > 0 ? 'Aktif' : 'Pasif';
+  const isTestUser = (username: string) => {
+    return username.includes('test') || 
+           username.includes('debug') || 
+           username === 'yeni_kullanici';
   };
+
+  const resetAllPoints = async () => {
+    if (window.confirm('Tüm kullanıcıların puanlarını sıfırlamak istediğinizden emin misiniz?')) {
+      try {
+        for (const user of users) {
+          await fetch(`${API_BASE_URL}/users/${user.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: user.username,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              phoneNumber: user.phoneNumber,
+              birthDate: user.birthDate,
+              points: 0,
+              balance: user.balance,
+              passwordHash: user.passwordHash
+            }),
+          });
+        }
+        
+        setSnackbar({ 
+          open: true, 
+          message: 'Tüm kullanıcıların puanları sıfırlandı', 
+          severity: 'success' 
+        });
+        loadUsers();
+      } catch (error) {
+        console.error('Puanlar sıfırlanırken hata:', error);
+        setSnackbar({ 
+          open: true, 
+          message: 'Puanlar sıfırlanırken hata oluştu', 
+          severity: 'error' 
+        });
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography>Yükleniyor...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: 3 }}>
@@ -176,10 +316,10 @@ const UserManagement = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleOpenDialog()}
+          onClick={loadUsers}
           startIcon={<PersonIcon />}
         >
-          Yeni Kullanıcı Ekle
+          Yenile
         </Button>
       </Box>
 
@@ -189,221 +329,254 @@ const UserManagement = () => {
         </Typography>
       )}
 
-      {loading ? (
-        <Typography>Yükleniyor...</Typography>
-      ) : (
-        <>
-          {/* Özet Kartları */}
-          <Grid container spacing={3} sx={{ mb: 3 }}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <PersonIcon color="primary" sx={{ mr: 1 }} />
-                    <div>
-                      <Typography color="textSecondary" gutterBottom>
-                        Toplam Kullanıcı
-                      </Typography>
-                      <Typography variant="h4">
-                        {users.length}
-                      </Typography>
-                    </div>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <StarsIcon color="warning" sx={{ mr: 1 }} />
-                    <div>
-                      <Typography color="textSecondary" gutterBottom>
-                        Aktif Kullanıcılar
-                      </Typography>
-                      <Typography variant="h4">
-                        {users.filter(user => user.points > 0).length}
-                      </Typography>
-                    </div>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <StarsIcon color="success" sx={{ mr: 1 }} />
-                    <div>
-                      <Typography color="textSecondary" gutterBottom>
-                        Toplam Puan
-                      </Typography>
-                      <Typography variant="h4">
-                        {users.reduce((sum, user) => sum + user.points, 0)}
-                      </Typography>
-                    </div>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <EmailIcon color="info" sx={{ mr: 1 }} />
-                    <div>
-                      <Typography color="textSecondary" gutterBottom>
-                        Toplam Bakiye
-                      </Typography>
-                      <Typography variant="h4">
-                        ₺{users.reduce((sum, user) => sum + user.balance, 0).toFixed(2)}
-                      </Typography>
-                    </div>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+      {/* İstatistikler */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Toplam Kullanıcı
+              </Typography>
+              <Typography variant="h5">
+                {users.length}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Gerçek Kullanıcılar
+              </Typography>
+              <Typography variant="h5">
+                {users.filter(u => !isTestUser(u.username)).length}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Test Kullanıcıları
+              </Typography>
+              <Typography variant="h5">
+                {users.filter(u => isTestUser(u.username)).length}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Toplam Puan
+              </Typography>
+              <Typography variant="h5">
+                {users.reduce((sum, u) => sum + u.points, 0)}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
-          {/* Kullanıcılar Tablosu */}
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Ad Soyad</TableCell>
-                  <TableCell>Kullanıcı Adı</TableCell>
-                  <TableCell>E-posta</TableCell>
-                  <TableCell>Puan</TableCell>
-                  <TableCell>Bakiye</TableCell>
-                  <TableCell>Durum</TableCell>
-                  <TableCell>İşlemler</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-                    <TableCell>{getDisplayName(user)}</TableCell>
-                    <TableCell>{user.username}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={user.points} 
-                        color="primary" 
-                        size="small"
-                        icon={<StarsIcon />}
-                      />
-                    </TableCell>
-                    <TableCell>₺{user.balance.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={getActivityStatus(user)} 
-                        color={user.points > 0 ? "success" : "default"} 
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton 
-                        onClick={() => handleOpenDialog(user)}
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton 
-                        onClick={() => handleDeleteUser(user.id)}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </>
-      )}
+      {/* Aksiyonlar */}
+      <Box sx={{ mb: 2 }}>
+        <Button 
+          variant="outlined" 
+          color="warning"
+          onClick={handleDeleteTestUsers}
+          sx={{ mr: 2 }}
+        >
+          Test Kullanıcılarını Temizle
+        </Button>
+        <Button 
+          variant="outlined" 
+          color="error"
+          onClick={resetAllPoints}
+          sx={{ mr: 2 }}
+        >
+          Tüm Puanları Sıfırla
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={loadUsers}
+        >
+          Yenile
+        </Button>
+      </Box>
 
-      {/* Kullanıcı Ekleme/Düzenleme Dialog */}
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+      {/* Kullanıcılar Tablosu */}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Kullanıcı Adı</TableCell>
+              <TableCell>Ad Soyad</TableCell>
+              <TableCell>E-posta</TableCell>
+              <TableCell>Telefon</TableCell>
+              <TableCell>Puan</TableCell>
+              <TableCell>Bakiye</TableCell>
+              <TableCell>Durum</TableCell>
+              <TableCell>İşlemler</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <PersonIcon fontSize="small" />
+                    {user.username}
+                  </Box>
+                </TableCell>
+                <TableCell>{getDisplayName(user)}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.phoneNumber || '-'}</TableCell>
+                <TableCell>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <StarIcon fontSize="small" color="warning" />
+                    {user.points}
+                  </Box>
+                </TableCell>
+                <TableCell>₺{user.balance.toFixed(2)}</TableCell>
+                <TableCell>
+                  {isTestUser(user.username) ? (
+                    <Chip label="Test" color="warning" size="small" />
+                  ) : (
+                    <Chip label="Gerçek" color="success" size="small" />
+                  )}
+                </TableCell>
+                <TableCell>
+                  <IconButton 
+                    size="small" 
+                    color="warning"
+                    onClick={() => handlePointsClick(user)}
+                    title="Puan Düzenle"
+                  >
+                    <StarIcon />
+                  </IconButton>
+                  <IconButton size="small" color="primary" title="Görüntüle">
+                    <ViewIcon />
+                  </IconButton>
+                  <IconButton 
+                    size="small" 
+                    color="error"
+                    onClick={() => handleDeleteClick(user)}
+                    title="Sil"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Puan Düzenleme Dialog */}
+      <Dialog open={pointsDialogOpen} onClose={() => setPointsDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {isEditMode ? 'Kullanıcı Düzenle' : 'Yeni Kullanıcı Ekle'}
+          Puan Düzenle - {selectedUser?.username}
         </DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Ad"
-                value={newUser.firstName}
-                onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Soyad"
-                value={newUser.lastName}
-                onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Kullanıcı Adı"
-                value={newUser.username}
-                onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="E-posta"
-                type="email"
-                value={newUser.email}
-                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Puan"
-                type="number"
-                value={newUser.points}
-                onChange={(e) => setNewUser({ ...newUser, points: parseInt(e.target.value) || 0 })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Bakiye (₺)"
-                type="number"
-                inputProps={{ step: "0.01" }}
-                value={newUser.balance}
-                onChange={(e) => setNewUser({ ...newUser, balance: parseFloat(e.target.value) || 0 })}
-              />
-            </Grid>
-            {!isEditMode && (
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Şifre"
-                  type="password"
-                  value={newUser.passwordHash}
-                  onChange={(e) => setNewUser({ ...newUser, passwordHash: e.target.value })}
-                />
-              </Grid>
-            )}
-          </Grid>
+          <DialogContentText sx={{ mb: 2 }}>
+            <strong>{selectedUser?.username}</strong> kullanıcısının mevcut puanı: <strong>{selectedUser?.points}</strong>
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Puan Değişikliği (+/- değer girin)"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={pointsChange}
+            onChange={(e) => setPointsChange(e.target.value)}
+            helperText="Örnek: +200 (basit anket), +300 (linkli anket), +500 (premium anket)"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            label="Değişiklik Sebebi"
+            fullWidth
+            variant="outlined"
+            value={pointsReason}
+            onChange={(e) => setPointsReason(e.target.value)}
+            helperText="Puan değişikliğinin sebebini yazın"
+          />
+          {pointsChange && !isNaN(parseInt(pointsChange)) && (
+            <DialogContentText sx={{ mt: 2, fontWeight: 'bold' }}>
+              Yeni puan: {(selectedUser?.points || 0) + parseInt(pointsChange)}
+            </DialogContentText>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>İptal</Button>
-          <Button onClick={handleSaveUser} variant="contained">
-            {isEditMode ? 'Güncelle' : 'Ekle'}
+          <Button onClick={() => setPointsDialogOpen(false)}>İptal</Button>
+          <Button onClick={handlePointsUpdate} variant="contained">
+            Güncelle
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Silme Onay Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          Kullanıcı Sil
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            <strong>{selectedUser?.username}</strong> kullanıcısını silmek istediğinizden emin misiniz?
+            Bu işlem geri alınamaz!
+          </DialogContentText>
+          <DialogContentText sx={{ mb: 2 }}>
+            Kullanıcı Bilgileri:
+            <br />• Ad: {getDisplayName(selectedUser!)}
+            <br />• E-posta: {selectedUser?.email}
+            <br />• Puan: {selectedUser?.points}
+            <br />• Bakiye: ₺{selectedUser?.balance.toFixed(2)}
+          </DialogContentText>
+          <DialogContentText sx={{ mb: 2, fontWeight: 'bold' }}>
+            Onaylamak için kullanıcı adını yazın: <code>{selectedUser?.username}</code>
+          </DialogContentText>
+          <TextField
+            fullWidth
+            label="Kullanıcı adını buraya yazın"
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            error={confirmText !== '' && confirmText !== selectedUser?.username}
+            helperText={confirmText !== '' && confirmText !== selectedUser?.username ? 'Kullanıcı adı eşleşmiyor' : ''}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>İptal</Button>
+          <Button 
+            onClick={handleDeleteConfirm} 
+            color="error" 
+            variant="contained"
+            disabled={confirmText !== selectedUser?.username}
+          >
+            Sil
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

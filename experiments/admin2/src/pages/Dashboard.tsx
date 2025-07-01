@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -14,6 +15,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -22,7 +29,7 @@ const Dashboard = () => {
       
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={4}>
-          <Item>
+          <Item onClick={() => handleCardClick('/surveys')}>
             <Typography variant="h6">Anket Yönetimi</Typography>
             <Typography variant="body2">
               Yeni anket ekle, mevcut anketleri düzenle ve onayla
@@ -31,7 +38,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Item>
+          <Item onClick={() => handleCardClick('/payments')}>
             <Typography variant="h6">Ödeme İstekleri</Typography>
             <Typography variant="body2">
               Para çekme isteklerini incele ve onayla
@@ -40,7 +47,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Item>
+          <Item onClick={() => handleCardClick('/security')}>
             <Typography variant="h6">Güvenlik Kontrolleri</Typography>
             <Typography variant="body2">
               IP ve cihaz kontrollerini yönet
@@ -49,7 +56,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Item>
+          <Item onClick={() => handleCardClick('/users')}>
             <Typography variant="h6">Kullanıcı Yönetimi</Typography>
             <Typography variant="body2">
               Kullanıcıları görüntüle ve yönet
@@ -67,7 +74,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Item>
+          <Item onClick={() => handleCardClick('/settings')}>
             <Typography variant="h6">Ayarlar</Typography>
             <Typography variant="body2">
               Sistem ayarlarını yapılandır
