@@ -1,11 +1,8 @@
 package com.kazanion.models
 
-import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    @DocumentId
     val id: Long = 0,
     val username: String = "",
     val email: String = "",
@@ -15,6 +12,10 @@ data class User(
     val firstName: String? = null,
     @SerializedName("lastName")
     val lastName: String? = null,
+    @SerializedName("phoneNumber")
+    val phoneNumber: String? = null,
+    @SerializedName("birthDate")
+    val birthDate: String? = null,
     val points: Int = 0,
     val balance: Double = 0.0
 ) {
@@ -24,6 +25,13 @@ data class User(
             !firstName.isNullOrBlank() && !lastName.isNullOrBlank() -> "$firstName $lastName"
             !firstName.isNullOrBlank() -> firstName
             !lastName.isNullOrBlank() -> lastName
+            else -> username
+        }
+    
+    // Computed property for first name only (for homepage)
+    val firstNameOnly: String
+        get() = when {
+            !firstName.isNullOrBlank() -> firstName
             else -> username
         }
     

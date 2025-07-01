@@ -19,7 +19,6 @@ import com.kazanion.databinding.FragmentProfileBinding
 import com.kazanion.ProfileViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileFragment : Fragment() {
 
@@ -39,67 +38,153 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // ViewModel initialize ediliyorsa burada yapılabilir
-        // viewModel = ViewModelProvider(this).get(YourProfileViewModel::class.java)
+        
+        // Username'i SharedPreferences'dan al
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
+        
+        android.util.Log.d("ProfileFragment", "=== PROFILE FRAGMENT INIT ===")
+        android.util.Log.d("ProfileFragment", "SharedPreferences username: $username")
+        android.util.Log.d("ProfileFragment", "All SharedPreferences keys:")
+        sharedPreferences.all.forEach { (key, value) ->
+            android.util.Log.d("ProfileFragment", "  $key = $value")
+        }
+        
+        // ViewModel'i username ile initialize et
+        android.util.Log.d("ProfileFragment", "Calling viewModel.initializeWithUsername($username)")
+        viewModel.initializeWithUsername(username)
+        
         observeUser()
         setupClickListeners()
     }
 
     private fun observeUser() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            FirebaseFirestore.getInstance().collection("users").document(userId)
-                .addSnapshotListener { snapshot, _ ->
-                    val points = snapshot?.getLong("points") ?: 0
-                    binding.textTotalPoints.text = points.toString()
-                }
-        }
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
                 binding.textUserName.text = user.displayName
                 binding.textUserEmail.text = user.email
-                // binding.textTotalPoints.text = user.points.toString() // Artık yukarıdan dinamik geliyor
+                binding.textTotalPoints.text = user.points.toString()
+            } ?: run {
+                // Backend'den veri gelmezse Firebase'dan al
+                loadFirebaseUserData()
             }
+        }
+        
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            // Loading state gösterilebilir
+        }
+        
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                android.util.Log.e("ProfileFragment", "ViewModel error: $it")
+                showToast(it)
+                // Error olduğunda da Firebase'dan dene
+                android.util.Log.d("ProfileFragment", "API failed, trying fallback...")
+                loadFirebaseUserData()
+            }
+        }
+    }
+    
+    private fun loadFirebaseUserData() {
+        android.util.Log.d("ProfileFragment", "=== LOADING FIREBASE/FALLBACK DATA ===")
+        
+        // Önce SharedPreferences'dan kontrol et
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val savedDisplayName = sharedPreferences.getString("userDisplayName", "")
+        val savedEmail = sharedPreferences.getString("userEmail", "")
+        
+        android.util.Log.d("ProfileFragment", "SharedPreferences fallback:")
+        android.util.Log.d("ProfileFragment", "  savedDisplayName: '$savedDisplayName'")
+        android.util.Log.d("ProfileFragment", "  savedEmail: '$savedEmail'")
+        
+        if (!savedDisplayName.isNullOrEmpty()) {
+            android.util.Log.d("ProfileFragment", "Using SharedPreferences data")
+            android.util.Log.d("ProfileFragment", "  Display Name: $savedDisplayName")
+            android.util.Log.d("ProfileFragment", "  Email: $savedEmail")
+            
+            // Profil bilgilerini SharedPreferences'dan güncelle
+            binding.textUserName.text = savedDisplayName
+            binding.textUserEmail.text = savedEmail ?: ""
+            binding.textTotalPoints.text = "0" // Default değer
+            
+            android.util.Log.d("ProfileFragment", "SharedPreferences user data loaded: $savedDisplayName")
+            return
+        }
+        
+        // SharedPreferences'da bilgi yoksa Firebase'dan dene
+        android.util.Log.d("ProfileFragment", "SharedPreferences empty, trying Firebase...")
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+        
+        android.util.Log.d("ProfileFragment", "Firebase current user: ${currentUser?.uid}")
+        
+        if (currentUser != null) {
+            android.util.Log.d("ProfileFragment", "Using Firebase user data")
+            android.util.Log.d("ProfileFragment", "  Display Name: ${currentUser.displayName}")
+            android.util.Log.d("ProfileFragment", "  Email: ${currentUser.email}")
+            
+            val displayName = currentUser.displayName ?: "Kullanıcı"
+            val email = currentUser.email ?: ""
+            
+            // Profil bilgilerini Firebase'dan güncelle
+            binding.textUserName.text = displayName
+            binding.textUserEmail.text = email
+            binding.textTotalPoints.text = "0" // Default değer
+            
+            android.util.Log.d("ProfileFragment", "Firebase user data loaded: $displayName")
+        } else {
+            // Firebase user da yoksa default değerler
+            android.util.Log.d("ProfileFragment", "No Firebase user, using defaults")
+            binding.textUserName.text = "Kullanıcı"
+            binding.textUserEmail.text = ""
+            binding.textTotalPoints.text = "0"
         }
     }
 
     private fun setupClickListeners() {
-        binding.featureInvite?.setOnClickListener {
+        // Arkadaşlar davet et
+        binding.featureFriends?.setOnClickListener {
             showInviteDialog()
         }
 
-        // Assuming featureRanking, featureFriends are valid IDs in your layout
-        binding.featureRanking?.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_rankingFragment)
+        // İstatistikler
+        binding.featureStatistics?.setOnClickListener {
+            showToast("İstatistikler özelliği yakında eklenecek")
         }
 
-        binding.featureFriends?.setOnClickListener {
-            // Navigasyon grafiğinde action_profileFragment_to_friendsFragment tanımlı değil.
-            // friendsFragment'ı navigasyon grafiğine ekledikten sonra bu satırı uncomment yapın.
-            // findNavController().navigate(R.id.action_profileFragment_to_friendsFragment)
-            showToast("Arkadaşlar özelliği tıklandı - Navigasyon eksik")
+        // Profili düzenle
+        binding.buttonEditProfile?.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+            } catch (e: Exception) {
+                // Navigation action bulunamazsa EditProfileFragment'ı açmaya çalış
+                showToast("Profil düzenleme sayfası açılamıyor")
+            }
         }
 
-        // featureSentiment layout'ta yok, ilgili satırı kaldırdık
-        // binding.featureSentiment?.setOnClickListener { 
-        //    // Sentiment sayfasına navigasyon kodunu buraya ekleyin
-        // }
-         binding.buttonEditProfile?.setOnClickListener { /* Handle Edit Profile Click */ }
-         binding.featureLocation?.setOnClickListener { /* Handle Location Click */ }
-         binding.featureWallet?.setOnClickListener { /* Handle Wallet Click */ }
+        // Settings section click listeners
+        binding.settingNotifications?.setOnClickListener {
+            showToast("Bildirim ayarları yakında eklenecek")
+        }
+        
+        binding.settingLanguage?.setOnClickListener {
+            showToast("Dil ayarları yakında eklenecek")
+        }
+        
+        binding.settingPrivacy?.setOnClickListener {
+            showToast("Gizlilik ayarları yakında eklenecek")
+        }
+        
+        binding.settingHelp?.setOnClickListener {
+            showToast("Yardım ve destek yakında eklenecek")
+        }
 
-         // Settings section click listeners (Assuming these IDs exist in layout)
-         binding.settingNotifications?.setOnClickListener { /* Handle Notifications Setting Click */ }
-         binding.settingLanguage?.setOnClickListener { /* Handle Language Setting Click */ }
-         binding.settingPrivacy?.setOnClickListener { /* Handle Privacy Setting Click */ }
-         binding.settingHelp?.setOnClickListener { /* Handle Help Setting Click */ }
-
-         // Logout button click listener (Assuming this ID exists in layout)
-         binding.buttonLogout?.setOnClickListener {
-             val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
-             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
-             findNavController().navigate(R.id.loginFragment)
-         }
+        // Logout button
+        binding.buttonLogout?.setOnClickListener {
+            val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
 
     private fun showInviteDialog() {

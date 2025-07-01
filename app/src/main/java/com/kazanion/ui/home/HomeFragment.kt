@@ -1,6 +1,7 @@
 package com.kazanion.ui.home
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -23,6 +24,8 @@ import com.kazanion.model.Poll
 import com.kazanion.network.LocationPoll
 import com.kazanion.ui.locationpoll.LocationPollDetailBottomSheetFragment
 import com.kazanion.viewmodels.HomeViewModel
+import com.kazanion.viewmodels.AchievementViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeFragment : Fragment() {
 
@@ -30,6 +33,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: HomeViewModel
+    private lateinit var achievementViewModel: AchievementViewModel
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var activePollsAdapter: ActivePollsAdapter
     private lateinit var locationPollsAdapter: LocationPollsAdapter
@@ -50,6 +54,7 @@ class HomeFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        achievementViewModel = ViewModelProvider(this).get(AchievementViewModel::class.java)
 
         setupUI()
         setupObservers()
@@ -60,7 +65,9 @@ class HomeFragment : Fragment() {
         setupRecyclerViews()
         setupClickListeners()
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadAllData("yeni_kullanici", true)
+            val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+            val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
+            viewModel.loadAllData(username, true)
         }
     }
 
@@ -134,10 +141,22 @@ class HomeFragment : Fragment() {
 
         viewModel.userBalance.observe(viewLifecycleOwner) { balance ->
             balance?.let {
+                // Ana sayfa kullanıcı bilgileri
+                val displayName = if (!it.firstName.isNullOrBlank()) {
+                    it.firstName
+                } else {
+                    it.username
+                }
+                binding.textViewUserName.text = displayName
                 binding.textViewBalance.text = String.format("₺%.2f", it.balance)
                 binding.textViewPoints.text = "${it.points} Puan >"
+                
+                // Cüzdan kartı bilgileri
                 binding.textViewWalletBalance.text = String.format("₺%.2f", it.balance)
                 binding.textViewWalletPoints.text = "${it.points} puan"
+            } ?: run {
+                // Backend'den veri gelmezse Firebase'dan al
+                loadFirebaseUserData()
             }
         }
 
@@ -150,6 +169,11 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 viewModel.onErrorShown()
             }
+        }
+        
+        // Achievement observers
+        achievementViewModel.userRanking.observe(viewLifecycleOwner) { ranking ->
+            updateUserBadge(ranking?.badge)
         }
     }
 
@@ -189,6 +213,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun getCurrentLocationAndLoadData() {
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
+        val userId = sharedPreferences.getString("userId", null)?.toLongOrNull()
+        
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -198,9 +226,16 @@ class HomeFragment : Fragment() {
                 location?.let {
                     currentLocation = it
                 }
-                viewModel.loadAllData("yeni_kullanici")
+                viewModel.loadAllData(username)
+                
+                // Load user ranking for badge
+                userId?.let { 
+                    android.util.Log.d("HomeFragment", "Loading user ranking for userId: $it")
+                    achievementViewModel.loadUserRanking(it) 
+                }
             }.addOnFailureListener {
-                 viewModel.loadAllData("yeni_kullanici")
+                 viewModel.loadAllData(username)
+                 userId?.let { achievementViewModel.loadUserRanking(it) }
             }
         }
     }
@@ -212,6 +247,10 @@ class HomeFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+            val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
+            val userId = sharedPreferences.getString("userId", null)?.toLongOrNull()
+            
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocationAndLoadData()
             } else {
@@ -220,8 +259,93 @@ class HomeFragment : Fragment() {
                     "Konum izni olmadan konum bazlı anketler yüklenemez.",
                     Toast.LENGTH_LONG
                 ).show()
-                viewModel.loadAllData("yeni_kullanici")
+                viewModel.loadAllData(username)
+                userId?.let { achievementViewModel.loadUserRanking(it) }
             }
+        }
+    }
+
+    private fun updateUserBadge(badge: String?) {
+        android.util.Log.d("HomeFragment", "Updating user badge: $badge")
+        
+        when (badge) {
+            "gold" -> {
+                binding.imageViewUserBadge.setImageResource(R.drawable.ic_crown_gold)
+                binding.imageViewUserBadge.visibility = View.VISIBLE
+            }
+            "silver" -> {
+                binding.imageViewUserBadge.setImageResource(R.drawable.ic_crown_silver)
+                binding.imageViewUserBadge.visibility = View.VISIBLE
+            }
+            "bronze" -> {
+                binding.imageViewUserBadge.setImageResource(R.drawable.ic_crown_bronze)
+                binding.imageViewUserBadge.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.imageViewUserBadge.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun loadFirebaseUserData() {
+        // Önce SharedPreferences'dan kontrol et
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val savedDisplayName = sharedPreferences.getString("userDisplayName", "")
+        val savedEmail = sharedPreferences.getString("userEmail", "")
+        
+        if (!savedDisplayName.isNullOrEmpty()) {
+            android.util.Log.d("HomeFragment", "Loading from SharedPreferences...")
+            android.util.Log.d("HomeFragment", "  Display Name: $savedDisplayName")
+            android.util.Log.d("HomeFragment", "  Email: $savedEmail")
+            
+            val firstName = savedDisplayName.split(" ").firstOrNull() ?: savedEmail?.split("@")?.firstOrNull() ?: "Kullanıcı"
+            
+            // Ana sayfa bilgilerini SharedPreferences'dan güncelle
+            binding.textViewUserName.text = firstName
+            binding.textViewBalance.text = "₺0.00" // Default değer
+            binding.textViewPoints.text = "0 Puan >" // Default değer
+            
+            // Cüzdan kartı bilgileri
+            binding.textViewWalletBalance.text = "₺0.00"
+            binding.textViewWalletPoints.text = "0 puan"
+            
+            android.util.Log.d("HomeFragment", "SharedPreferences user name set to: $firstName")
+            return
+        }
+        
+        // SharedPreferences'da bilgi yoksa Firebase'dan dene
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+        
+        if (currentUser != null) {
+            android.util.Log.d("HomeFragment", "Loading Firebase user data...")
+            android.util.Log.d("HomeFragment", "  Display Name: ${currentUser.displayName}")
+            android.util.Log.d("HomeFragment", "  Email: ${currentUser.email}")
+            
+            val displayName = currentUser.displayName ?: ""
+            val firstName = if (displayName.isNotEmpty()) {
+                displayName.split(" ").firstOrNull() ?: currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
+            } else {
+                currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
+            }
+            
+            // Ana sayfa bilgilerini Firebase'dan güncelle
+            binding.textViewUserName.text = firstName
+            binding.textViewBalance.text = "₺0.00" // Default değer
+            binding.textViewPoints.text = "0 Puan >" // Default değer
+            
+            // Cüzdan kartı bilgileri
+            binding.textViewWalletBalance.text = "₺0.00"
+            binding.textViewWalletPoints.text = "0 puan"
+            
+            android.util.Log.d("HomeFragment", "Firebase user name set to: $firstName")
+        } else {
+            // Firebase user da yoksa default değerler
+            binding.textViewUserName.text = "Kullanıcı"
+            binding.textViewBalance.text = "₺0.00"
+            binding.textViewPoints.text = "0 Puan >"
+            binding.textViewWalletBalance.text = "₺0.00"
+            binding.textViewWalletPoints.text = "0 puan"
         }
     }
 

@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException
 import com.kazanion.model.Poll
 import com.kazanion.model.Achievement
 import com.kazanion.model.LeaderboardEntry
+import com.kazanion.model.UserRanking
 import com.kazanion.models.User
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -33,6 +34,12 @@ interface ApiService {
 
     @GET("api/users/username/{username}")
     suspend fun getUserBalance(@Path("username") username: String): UserBalance
+
+    @POST("api/users")
+    suspend fun createUser(@Body userData: CreateUserRequest): CreateUserResponse
+
+    @PUT("api/users/{id}")
+    suspend fun updateUser(@Path("id") userId: Long, @Body userData: CreateUserRequest): CreateUserResponse
 
     @POST("api/users/register")
     suspend fun registerUser(@Body user: RegisterUserRequest): User
@@ -59,7 +66,10 @@ interface ApiService {
     suspend fun getUserAchievements(@Path("userId") userId: Long): List<Achievement>
 
     @GET("api/achievements/leaderboard")
-    suspend fun getLeaderboard(): List<LeaderboardEntry>
+    suspend fun getLeaderboard(@Query("limit") limit: Int = 50): List<LeaderboardEntry>
+
+    @GET("api/achievements/leaderboard/user/{userId}")
+    suspend fun getUserRanking(@Path("userId") userId: Long): UserRanking
 
     @GET("api/users/{username}")
     suspend fun getUserByUsername(@Path("username") username: String): User
@@ -71,15 +81,22 @@ interface ApiService {
     suspend fun checkAchievements(@Path("userId") userId: Long): Map<String, String>
 
     companion object {
-        private const val BASE_URL = "https://kazanion.onrender.com/"
+        private const val BASE_URL = "http://192.168.1.103:8081/"  // Real device IP
 
         fun create(): ApiService {
             val gson = GsonBuilder()
                 .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
                 .create()
 
+            val okHttpClient = okhttp3.OkHttpClient.Builder()
+                .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                .build()
+
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService::class.java)
@@ -145,4 +162,28 @@ data class LoginResponse(
     val user: User?,
     val token: String?,
     val message: String
+)
+
+data class CreateUserRequest(
+    val username: String,
+    val email: String,
+    val passwordHash: String,
+    val firstName: String?,
+    val lastName: String?,
+    val phoneNumber: String?,
+    val birthDate: String?,
+    val points: Int,
+    val balance: Double
+)
+
+data class CreateUserResponse(
+    val id: Long,
+    val username: String,
+    val email: String,
+    val firstName: String?,
+    val lastName: String?,
+    val phoneNumber: String?,
+    val birthDate: String?,
+    val points: Int,
+    val balance: Double
 ) 

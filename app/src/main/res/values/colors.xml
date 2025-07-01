@@ -60,7 +60,7 @@
     <color name="gray">#808080</color>
 
     <!-- Yeni renkler -->
-    <color name="app_background_light">#F5F5F5</color>
+    <color name="app_background_light">#FFFFFF</color>
     <color name="top_bar_background_light">#FFFFFF</color>
     <color name="bottom_nav_background_light">#FFFFFF</color>
     <color name="profile_gradient_start">#80D8FF</color> <!-- Açık mavi A100 -->
@@ -76,4 +76,9 @@
     <color name="gold">#FFD700</color>
     <color name="silver">#C0C0C0</color>
     <color name="bronze">#CD7F32</color>
+    
+    <!-- Additional colors for leaderboard -->
+    <color name="light_gray">#F5F5F5</color>
+    <color name="dark_gray">#666666</color>
+    <color name="light_blue">#E3F2FD</color>
 </resources>

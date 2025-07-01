@@ -51,7 +51,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="32dp"
-        android:hint="E-posta"
+        android:hint="E-posta veya Kullanıcı Adı"
         app:boxStrokeColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -146,24 +146,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/orText" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonGoogle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="GOOGLE ILE GIRIŞ YAP"
-        android:drawableStart="@drawable/ic_google"
-        android:drawablePadding="8dp"
-        app:iconGravity="textStart"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:textColor="@color/black"
-        app:strokeColor="@color/secondary_dark"
-        app:cornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonRegister" />
 
 </androidx.constraintlayout.widget.ConstraintLayout> 

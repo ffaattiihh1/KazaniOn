@@ -96,7 +96,16 @@
         <action
             android:id="@+id/action_profileFragment_to_rankingFragment"
             app:destination="@id/rankingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.kazanion.ui.profile.EditProfileFragment"
+        android:label="Profili Düzenle"
+        tools:layout="@layout/fragment_edit_profile" />
 
     <fragment
         android:id="@+id/registerFragment"
@@ -105,6 +114,11 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
     </fragment>

@@ -1,13 +1,11 @@
 services:
   - type: web
     name: kazanion-admin
-    env: docker
-    dockerfilePath: ./Dockerfile
-    plan: free
-    region: oregon
-    healthCheckPath: /
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    domains:
+      - vincentus.tr
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: REACT_APP_API_URL
-        value: https://kazanion.onrender.com/api 
+      - key: NODE_VERSION
+        value: 18 

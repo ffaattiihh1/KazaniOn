@@ -210,127 +210,40 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <GridLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="4"
-                    android:rowCount="2"
-                    android:useDefaultMargins="true">
-
-                    <!-- Feature Item (Konum) -->
-                    <LinearLayout
-                        android:id="@+id/feature_location"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_location" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Konum"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <!-- Feature Item (Cüzdan) -->
-                    <LinearLayout
-                        android:id="@+id/feature_wallet"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_wallet" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Cüzdan"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <!-- Feature Item (Sıralama) -->
-                    <LinearLayout
-                        android:id="@+id/feature_ranking"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_ranking" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Sıralama"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-                    </LinearLayout>
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <!-- Feature Item (Arkadaşlar) -->
                     <LinearLayout
                         android:id="@+id/feature_friends"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
+                        android:padding="16dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/card_background">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
+                            android:padding="12dp"
                             android:src="@drawable/ic_friends" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="Arkadaşlar"
+                            android:text="Arkadaşlar\nDavet Et"
                             android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <!-- Feature Item (İstatistik) -->
@@ -338,89 +251,32 @@
                         android:id="@+id/feature_statistics"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
+                        android:padding="16dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/card_background">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
+                            android:padding="12dp"
                             android:src="@drawable/ic_statistics" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="İstatistik"
+                            android:text="İstatistikler"
                             android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Feature Item (Bildirimler) -->
-                    <LinearLayout
-                        android:id="@+id/feature_notifications"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_notifications" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Bildirimler"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <!-- Feature Item (Davet Et) -->
-                    <LinearLayout
-                        android:id="@+id/feature_invite"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/circle_button_background"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_invite" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center"
-                            android:text="Davet Et"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                </GridLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

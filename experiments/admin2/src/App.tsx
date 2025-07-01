@@ -12,7 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SecurityIcon from '@mui/icons-material/Security';
-import Users from './pages/Users';
+import UserManagement from './pages/UserManagement';
 import ArticleIcon from '@mui/icons-material/Article';
 import StoryManagement from './pages/StoryManagement';
 
@@ -246,7 +246,7 @@ const App = () => {
               <Route path="/payments" element={<PaymentRequests />} />
               <Route path="/security" element={<SecuritySettings />} />
               <Route path="/logout" element={<Dashboard />} />
-              <Route path="/users" element={<Users />} />
+              <Route path="/users" element={<UserManagement />} />
               <Route path="/settings" element={<Typography variant="h6">Ayarlar (Demo)</Typography>} />
             </Routes>
           </Container>
