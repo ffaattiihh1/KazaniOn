@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy backend files
-COPY KazaniOnBackend/ .
+COPY . .
 
 # Make gradlew executable and build
 RUN chmod +x gradlew && ./gradlew build -x test
