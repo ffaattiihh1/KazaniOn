@@ -47,9 +47,9 @@ class AchievementsAdapter(
         holder.imageViewIcon.setImageResource(iconResId)
         holder.textViewTitle.text = achievement.title
         holder.textViewDescription.text = achievement.description
-        holder.textViewPoints.text = "${achievement.pointsReward} Puan (${achievement.pointsReward / 10} Coin)"
+        holder.textViewPoints.text = "${achievement.pointsReward / 10} Coin"  // Sadece coin göster
 
-        // Set status and visual appearance based on earned status
+        // Set status and visual appearance based on earned status - MAVİ TİK
         if (achievement.isEarned) {
             holder.textViewStatus.text = "✓ Tamamlandı"
             holder.textViewStatus.setTextColor(holder.itemView.context.getColor(R.color.kazanion_blue))
@@ -58,7 +58,7 @@ class AchievementsAdapter(
             holder.textViewDescription.alpha = 1.0f
             holder.imageViewCheckmark.visibility = View.VISIBLE
             holder.imageViewCheckmark.setImageResource(R.drawable.ic_check_circle)
-            holder.imageViewCheckmark.setColorFilter(holder.itemView.context.getColor(R.color.kazanion_blue))
+            holder.imageViewCheckmark.setColorFilter(holder.itemView.context.getColor(R.color.kazanion_blue))  // MAVİ TİK
             
             // Add earned date if available
             achievement.earnedAt?.let { date ->

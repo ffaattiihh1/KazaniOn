@@ -3,6 +3,7 @@ package com.kazanion
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -10,11 +11,14 @@ import com.kazanion.databinding.ActivityMainBinding
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.NavDestination
+import com.kazanion.utils.NotificationPermissionHelper
+import com.kazanion.services.NotificationPollingService
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var isLoggedIn: Boolean = false
+    private lateinit var notificationPermissionHelper: NotificationPermissionHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         // Hide action bar
         supportActionBar?.hide()
 
+        // Initialize notification permission helper
+        notificationPermissionHelper = NotificationPermissionHelper(this)
+
         // Check login status
         val sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
         isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
@@ -31,9 +38,13 @@ class MainActivity : AppCompatActivity() {
         // Setup Navigation
         setupNavigation()
 
-        // If logged in, navigate to home
+        // Navigate based on login status
         if (isLoggedIn) {
             navController.navigate(R.id.homeFragment)
+            // Kullanıcı zaten giriş yapmışsa notification service'ini başlat
+            NotificationPollingService.startPolling(this)
+        } else {
+            navController.navigate(R.id.loginFragment)
         }
     }
 
@@ -53,40 +64,8 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        // Setup bottom navigation with nav controller
-        // binding.bottomNavigation.setupWithNavController(navController)
-
-        // Custom navigation to prevent wrong fragment redirection
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.homeFragment -> {
-                    navController.popBackStack(R.id.homeFragment, false)
-                    navController.navigate(R.id.homeFragment)
-                    true
-                }
-                R.id.navigation_polls -> {
-                    navController.popBackStack(R.id.navigation_polls, false)
-                    navController.navigate(R.id.navigation_polls)
-                    true
-                }
-                R.id.navigation_explore -> {
-                    navController.popBackStack(R.id.navigation_explore, false)
-                    navController.navigate(R.id.navigation_explore)
-                    true
-                }
-                R.id.navigation_achievements -> {
-                    navController.popBackStack(R.id.navigation_achievements, false)
-                    navController.navigate(R.id.navigation_achievements)
-                    true
-                }
-                R.id.navigation_profile -> {
-                    navController.popBackStack(R.id.navigation_profile, false)
-                    navController.navigate(R.id.navigation_profile)
-                    true
-                }
-                else -> false
-            }
-        }
+        // Setup bottom navigation with nav controller - HIZLI NAVİGATİON!
+        binding.bottomNavigation.setupWithNavController(navController)
 
         // Handle navigation visibility and behavior
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -100,6 +79,12 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNavigation.visibility = View.GONE
                 }
                 else -> {
+                    // If user is not logged in and trying to access protected screens, redirect to login
+                    if (!isLoggedIn && destination.id != R.id.loginFragment && destination.id != R.id.registerFragment) {
+                        navController.navigate(R.id.loginFragment)
+                        return@addOnDestinationChangedListener
+                    }
+                    
                     if (isLoggedIn) {
                         binding.bottomNavigation.visibility = View.VISIBLE
                     }
@@ -120,13 +105,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // Handle back button press
-        if (navController.currentDestination?.id == R.id.homeFragment) {
-            // If we're on home, exit the app
-            super.onBackPressed()
-        } else {
-            // Navigate back to home
-            navController.navigate(R.id.homeFragment)
+        // Handle back button press based on current destination
+        when (navController.currentDestination?.id) {
+            R.id.homeFragment -> {
+                // If we're on home, exit the app
+                super.onBackPressed()
+            }
+            R.id.registerFragment -> {
+                // From register, go back to login
+                navController.navigate(R.id.loginFragment)
+            }
+            R.id.loginFragment -> {
+                // From login, exit the app
+                super.onBackPressed()
+            }
+            else -> {
+                // For other fragments, use default back behavior
+                if (!navController.popBackStack()) {
+                    super.onBackPressed()
+                }
+            }
         }
     }
 
@@ -139,5 +137,45 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_profile -> true
             else -> false
         }
+    }
+    
+    // Ana sayfadan bottom tab seçimi için
+    fun selectBottomTab(tabId: Int) {
+        binding.bottomNavigation.selectedItemId = tabId
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (!notificationPermissionHelper.isNotificationPermissionGranted()) {
+            notificationPermissionHelper.requestNotificationPermission(this) { granted ->
+                if (granted) {
+                    Toast.makeText(this, "Bildirimler etkinleştirildi! 🔔", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Bildirimleri kaçırmamak için ayarlardan izni etkinleştirebilirsiniz", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        
+        notificationPermissionHelper.handlePermissionResult(requestCode, permissions, grantResults) { granted ->
+            if (granted) {
+                Toast.makeText(this, "Bildirimler etkinleştirildi! 🔔", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Bildirimleri kaçırmamak için ayarlardan izni etkinleştirebilirsiniz", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    // Login işlemi başarılı olduktan sonra çağrılacak
+    fun onLoginSuccess() {
+        requestNotificationPermissionIfNeeded()
+        // Bildirim polling service'ini başlat
+        NotificationPollingService.startPolling(this)
     }
 } 

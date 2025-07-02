@@ -12,20 +12,25 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.kazanion.R
 import com.kazanion.databinding.FragmentProfileBinding
-import com.kazanion.ProfileViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
+import com.kazanion.MainActivity
+import com.kazanion.utils.NotificationPermissionHelper
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: ProfileViewModel by viewModels()
+    
+    // CACHE - Sayfa değişiminde hızlı açılması için
+    companion object {
+        private var userDataLoaded = false
+        private var cachedDisplayName: String? = null
+        private var cachedEmail: String? = null
+        private var cachedUserId: Long? = null
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,106 +44,143 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        // Username'i SharedPreferences'dan al
-        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
-        val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
-        
-        android.util.Log.d("ProfileFragment", "=== PROFILE FRAGMENT INIT ===")
-        android.util.Log.d("ProfileFragment", "SharedPreferences username: $username")
-        android.util.Log.d("ProfileFragment", "All SharedPreferences keys:")
-        sharedPreferences.all.forEach { (key, value) ->
-            android.util.Log.d("ProfileFragment", "  $key = $value")
-        }
-        
-        // ViewModel'i username ile initialize et
-        android.util.Log.d("ProfileFragment", "Calling viewModel.initializeWithUsername($username)")
-        viewModel.initializeWithUsername(username)
-        
-        observeUser()
+        // HER ZAMAN YENİDEN YÜKLE - EMAIL SORUNU ÇÖZÜLENE KADAR
+        android.util.Log.d("ProfileFragment", "🔄 Her zaman fresh data yükleniyor...")
+        loadUserData()
         setupClickListeners()
+        setupNotificationSwitch()
     }
 
-    private fun observeUser() {
-        viewModel.user.observe(viewLifecycleOwner) { user ->
-            user?.let {
-                binding.textUserName.text = user.displayName
-                binding.textUserEmail.text = user.email
-                binding.textTotalPoints.text = user.points.toString()
-            } ?: run {
-                // Backend'den veri gelmezse Firebase'dan al
-                loadFirebaseUserData()
-            }
-        }
-        
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            // Loading state gösterilebilir
-        }
-        
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            error?.let {
-                android.util.Log.e("ProfileFragment", "ViewModel error: $it")
-                showToast(it)
-                // Error olduğunda da Firebase'dan dene
-                android.util.Log.d("ProfileFragment", "API failed, trying fallback...")
-                loadFirebaseUserData()
-            }
-        }
+    private fun loadUserData() {
+        // Direkt Firebase/SharedPreferences'dan veri yükle
+        loadFirebaseUserData()
     }
     
     private fun loadFirebaseUserData() {
-        android.util.Log.d("ProfileFragment", "=== LOADING FIREBASE/FALLBACK DATA ===")
-        
-        // Önce SharedPreferences'dan kontrol et
+        // SharedPreferences'dan kullanıcı verilerini al
         val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        
+        // DEBUG: Tüm SharedPreferences'ları listele
+        android.util.Log.d("ProfileFragment", "🔍 SharedPreferences DEBUG:")
+        sharedPreferences.all.forEach { (key, value) ->
+            android.util.Log.d("ProfileFragment", "   $key = $value")
+        }
+        
         val savedDisplayName = sharedPreferences.getString("userDisplayName", "")
-        val savedEmail = sharedPreferences.getString("userEmail", "")
+        val userEmail = sharedPreferences.getString("userEmail", "")
+        val mainEmail = sharedPreferences.getString("email", "")
+        val username = sharedPreferences.getString("username", "")
+        val firstName = sharedPreferences.getString("firstName", "")
+        val lastName = sharedPreferences.getString("lastName", "")
+        val userId = sharedPreferences.getString("userId", null)?.toLongOrNull() ?: generateUserId()
         
-        android.util.Log.d("ProfileFragment", "SharedPreferences fallback:")
-        android.util.Log.d("ProfileFragment", "  savedDisplayName: '$savedDisplayName'")
-        android.util.Log.d("ProfileFragment", "  savedEmail: '$savedEmail'")
+        // EMAIL DEBUG
+        android.util.Log.d("ProfileFragment", "📧 EMAIL DEBUG:")
+        android.util.Log.d("ProfileFragment", "   userEmail = '$userEmail'")
+        android.util.Log.d("ProfileFragment", "   email = '$mainEmail'")
         
-        if (!savedDisplayName.isNullOrEmpty()) {
-            android.util.Log.d("ProfileFragment", "Using SharedPreferences data")
-            android.util.Log.d("ProfileFragment", "  Display Name: $savedDisplayName")
-            android.util.Log.d("ProfileFragment", "  Email: $savedEmail")
-            
-            // Profil bilgilerini SharedPreferences'dan güncelle
-            binding.textUserName.text = savedDisplayName
-            binding.textUserEmail.text = savedEmail ?: ""
-            binding.textTotalPoints.text = "0" // Default değer
-            
-            android.util.Log.d("ProfileFragment", "SharedPreferences user data loaded: $savedDisplayName")
-            return
+        // İsim Soyisim (birden fazla kaynaktan dene)
+        val fullName = when {
+            !savedDisplayName.isNullOrEmpty() -> savedDisplayName
+            !firstName.isNullOrEmpty() && !lastName.isNullOrEmpty() -> "$firstName $lastName"
+            !firstName.isNullOrEmpty() -> firstName
+            else -> "İsim Soyisim"
         }
         
-        // SharedPreferences'da bilgi yoksa Firebase'dan dene
-        android.util.Log.d("ProfileFragment", "SharedPreferences empty, trying Firebase...")
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val currentUser = firebaseAuth.currentUser
+        // Email (TÜM OLASILIKLARı KONTROL ET)
+        val email = when {
+            !userEmail.isNullOrEmpty() -> {
+                android.util.Log.d("ProfileFragment", "✅ userEmail kullanılıyor: '$userEmail'")
+                userEmail
+            }
+            !mainEmail.isNullOrEmpty() -> {
+                android.util.Log.d("ProfileFragment", "✅ email kullanılıyor: '$mainEmail'")
+                mainEmail
+            }
+            !username.isNullOrEmpty() && username.contains("@") -> {
+                android.util.Log.d("ProfileFragment", "✅ username email formatında: '$username'")
+                username
+            }
+            else -> {
+                android.util.Log.d("ProfileFragment", "⚠️ Email bulunamadı, default kullanılıyor")
+                "email@example.com"
+            }
+        }
         
-        android.util.Log.d("ProfileFragment", "Firebase current user: ${currentUser?.uid}")
-        
-        if (currentUser != null) {
-            android.util.Log.d("ProfileFragment", "Using Firebase user data")
-            android.util.Log.d("ProfileFragment", "  Display Name: ${currentUser.displayName}")
-            android.util.Log.d("ProfileFragment", "  Email: ${currentUser.email}")
-            
-            val displayName = currentUser.displayName ?: "Kullanıcı"
-            val email = currentUser.email ?: ""
-            
-            // Profil bilgilerini Firebase'dan güncelle
-            binding.textUserName.text = displayName
-            binding.textUserEmail.text = email
-            binding.textTotalPoints.text = "0" // Default değer
-            
-            android.util.Log.d("ProfileFragment", "Firebase user data loaded: $displayName")
+        // Username (@ ile)
+        val usernameDisplay = if (!username.isNullOrEmpty()) {
+            "@$username"
         } else {
-            // Firebase user da yoksa default değerler
-            android.util.Log.d("ProfileFragment", "No Firebase user, using defaults")
-            binding.textUserName.text = "Kullanıcı"
-            binding.textUserEmail.text = ""
-            binding.textTotalPoints.text = "0"
+            "@kullaniciadi"
         }
+        
+        android.util.Log.d("ProfileFragment", "📝 Final values: fullName='$fullName', email='$email', username='$usernameDisplay'")
+        
+        // UI'ı güncelle
+        binding.textUserName.text = fullName
+        binding.textUserEmail.text = email
+        binding.textUsername.text = usernameDisplay
+        binding.textTotalPoints.text = "0" // Default değer
+        
+        // CACHE'E KAYDET - Bir sonraki açılış hızlı olsun!
+        userDataLoaded = true
+        cachedDisplayName = fullName
+        cachedEmail = email
+        cachedUserId = userId
+        
+        // 6 haneli ID sistemi - önce backend'den publicId kontrol et
+        val savedPublicId = sharedPreferences.getString("publicId", null)
+        val displayId = if (!savedPublicId.isNullOrEmpty()) {
+            savedPublicId.toLongOrNull() ?: generate6DigitId(userId)
+        } else {
+            generate6DigitId(userId)
+        }
+        updateUserIdDisplay(displayId)
+    }
+    
+    private fun generateUserId(): Long {
+        // Eğer userId yoksa, yeni bir tane oluştur ve kaydet
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val newUserId = System.currentTimeMillis() % 1000000 // Son 6 hane
+        sharedPreferences.edit().putString("userId", newUserId.toString()).apply()
+        return newUserId
+    }
+    
+    private fun generate6DigitId(originalId: Long): Long {
+        // 6 haneli ID sistemi - 100000 ile 999999 arasında
+        val id6Digit = (originalId % 900000) + 100000
+        return id6Digit
+    }
+    
+    private fun updateUserIdDisplay(userId: Long) {
+        val userIdText = "ID: #$userId"
+        binding.textUserId.text = userIdText
+        
+        // ID'ye tıklandığında kopyala
+        binding.textUserId.setOnClickListener {
+            copyUserIdToClipboard(userId.toString())
+        }
+    }
+    
+    private fun copyUserIdToClipboard(userId: String) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Kullanıcı ID", userId)
+        clipboard.setPrimaryClip(clip)
+        
+        // Kopyalandı bildirimi
+        showToast("Kullanıcı ID kopyalandı: #$userId")
+        
+        // Visual feedback - ID background'ını kısa süre değiştir
+        binding.textUserId.animate()
+            .scaleX(1.1f)
+            .scaleY(1.1f)
+            .setDuration(150)
+            .withEndAction {
+                binding.textUserId.animate()
+                    .scaleX(1.0f)
+                    .scaleY(1.0f)
+                    .setDuration(150)
+            }
     }
 
     private fun setupClickListeners() {
@@ -164,7 +206,7 @@ class ProfileFragment : Fragment() {
 
         // Settings section click listeners
         binding.settingNotifications?.setOnClickListener {
-            showToast("Bildirim ayarları yakında eklenecek")
+            handleNotificationSettings()
         }
         
         binding.settingLanguage?.setOnClickListener {
@@ -258,15 +300,133 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getInviteLink(): String {
-        // TODO: Gerçek davet linkini oluştur
-        // ViewModel kullanılıyorsa aşağıdaki satırı uncomment yapıp ViewModel'ı doğru initialize edin
-        // return "https://kazanion.com/invite/${viewModel.getCurrentUser()?.id}"
-        return "https://kazanion.com/invite/user_id_placeholder"
+        // Kullanıcı ID'sini al ve davet linkinde kullan
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null) ?: "unknown"
+        return "https://kazanion.com/invite/$userId"
     }
 
     // showToast fonksiyonu sınıf içinde tanımlı
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleNotificationSettings() {
+        val notificationHelper = NotificationPermissionHelper(requireActivity())
+        
+        if (notificationHelper.isNotificationPermissionGranted()) {
+            // Bildirimler zaten açık - Kapatma seçeneği sunalım
+            android.app.AlertDialog.Builder(requireContext())
+                .setTitle("Bildirim Ayarları")
+                .setMessage("Bildirimler aktif. Kapatmak ister misiniz?")
+                .setPositiveButton("Ayarları Aç") { _, _ ->
+                    // Android sistem ayarlarını aç
+                    notificationHelper.openNotificationSettings(requireContext())
+                }
+                .setNegativeButton("İptal", null)
+                .show()
+        } else {
+            // Bildirimler kapalı - Açma seçeneği sunalım
+            android.app.AlertDialog.Builder(requireContext())
+                .setTitle("Bildirimler Kapalı")
+                .setMessage("Önemli duyuruları kaçırmamak için bildirimleri açmak ister misiniz?")
+                .setPositiveButton("Bildirimleri Aç") { _, _ ->
+                    requestNotificationPermission()
+                }
+                .setNegativeButton("İptal", null)
+                .show()
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        val notificationHelper = NotificationPermissionHelper(requireActivity())
+        notificationHelper.requestNotificationPermission(requireActivity()) { granted ->
+            if (granted) {
+                showToast("Bildirimler etkinleştirildi! 🔔")
+                // Switch'i güncelle
+                binding.switchNotifications.isChecked = true
+            } else {
+                showToast("Bildirim izni verilmedi. Ayarlardan manuel olarak açabilirsiniz.")
+                // Switch'i kapat
+                binding.switchNotifications.isChecked = false
+            }
+        }
+    }
+    
+    private fun setupNotificationSwitch() {
+        // Notification channel oluştur
+        createNotificationChannel()
+        
+        // Switch durumunu kontrol et
+        val notificationHelper = NotificationPermissionHelper(requireActivity())
+        val isEnabled = notificationHelper.isNotificationPermissionGranted()
+        binding.switchNotifications.isChecked = isEnabled
+        
+        android.util.Log.d("ProfileFragment", "🔔 Notification switch durumu: $isEnabled")
+        
+        // Switch listener ekle
+        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            android.util.Log.d("ProfileFragment", "🔄 Switch değişti: $isChecked")
+            
+            if (isChecked) {
+                // Bildirimleri aç
+                if (!notificationHelper.isNotificationPermissionGranted()) {
+                    // İzin yok, iste
+                    requestNotificationPermission()
+                } else {
+                    // İzin var, sadece kaydet
+                    saveNotificationEnabled(true)
+                    showToast("Bildirimler açıldı! 🔔")
+                }
+            } else {
+                // Bildirimleri kapat
+                saveNotificationEnabled(false)
+                showToast("Bildirimler kapatıldı")
+                
+                // Sistem ayarlarına yönlendir
+                android.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Sistem Ayarları")
+                    .setMessage("Bildirimleri tamamen kapatmak için sistem ayarlarından da kapatmanız önerilir.")
+                    .setPositiveButton("Ayarları Aç") { _, _ ->
+                        notificationHelper.openNotificationSettings(requireContext())
+                    }
+                    .setNegativeButton("Tamam", null)
+                    .show()
+            }
+        }
+    }
+    
+    private fun createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val channelId = "kazanion_notifications"
+            val channelName = "KazaniOn Bildirimleri"
+            val channelDescription = "Anket ve duyuru bildirimleri"
+            val importance = android.app.NotificationManager.IMPORTANCE_DEFAULT
+            
+            val channel = android.app.NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+                enableVibration(true)
+                enableLights(true)
+            }
+            
+            val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+            notificationManager.createNotificationChannel(channel)
+            
+            android.util.Log.d("ProfileFragment", "📱 Notification channel oluşturuldu: $channelId")
+        }
+    }
+    
+    private fun saveNotificationEnabled(enabled: Boolean) {
+        try {
+            val sharedPref = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putBoolean("notification_enabled", enabled)
+                apply()
+            }
+            android.util.Log.d("ProfileFragment", "💾 Notification ayarı kaydedildi: $enabled")
+        } catch (e: Exception) {
+            android.util.Log.e("ProfileFragment", "❌ Notification ayarı kaydedilemedi", e)
+        }
     }
 
     override fun onDestroyView() {

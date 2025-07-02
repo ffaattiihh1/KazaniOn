@@ -50,6 +50,9 @@ interface ApiService {
     @POST("api/users/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 
+    @POST("api/users/forgot-password")
+    suspend fun forgotPassword(@Body request: Map<String, String>): Map<String, Any>
+
     @GET("api/users/profile/{userId}")
     suspend fun getUserProfile(@Path("userId") userId: Long): User
 
@@ -80,27 +83,52 @@ interface ApiService {
     @POST("api/achievements/check/{userId}")
     suspend fun checkAchievements(@Path("userId") userId: Long): Map<String, String>
 
+    @PUT("api/users/{userId}/fcm-token")
+    suspend fun updateFcmToken(@Path("userId") userId: Long, @Body tokenData: Map<String, String>): retrofit2.Response<Map<String, String>>
+
+    @GET("api/notifications/user/{userId}/unread")
+    suspend fun getUserUnreadNotifications(@Path("userId") userId: Long): retrofit2.Response<Map<String, Any>>
+
     companion object {
-        private const val BASE_URL = "http://192.168.1.103:8081/"  // Real device IP
+        // Production ve Development URL'leri
+        private const val PRODUCTION_URL = "https://kazanion.onrender.com/"
+        private const val LOCAL_DEV_URL = "http://10.0.2.2:8081/"
+        private const val BASE_URL = PRODUCTION_URL  // Production için
 
         fun create(): ApiService {
+            // Production için her zaman production URL kullan
+            val selectedUrl = BASE_URL
+            
+            // Debug: Hangi URL kullanıldığını logla
+            android.util.Log.d("ApiService", "📱 Device: ${android.os.Build.MODEL}")
+            android.util.Log.d("ApiService", "🌐 Production URL: $selectedUrl")
+            
             val gson = GsonBuilder()
                 .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
                 .create()
 
             val okHttpClient = okhttp3.OkHttpClient.Builder()
-                .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
-                .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)  // Daha uzun timeout
+                .readTimeout(20, java.util.concurrent.TimeUnit.SECONDS)     // Daha uzun timeout
+                .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)    // Daha uzun timeout
+                .addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader("Connection", "close")    // Connection reuse'u önle
+                        .addHeader("Cache-Control", "no-cache") // Cache sorunlarını önle
+                        .addHeader("Accept", "application/json")
+                        .build()
+                    chain.proceed(request)
+                }
                 .build()
 
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(selectedUrl)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService::class.java)
         }
+
     }
 }
 
@@ -173,10 +201,13 @@ data class CreateUserRequest(
     val phoneNumber: String?,
     val birthDate: String?,
     val points: Int,
-    val balance: Double
+    val balance: Double,
+    val city: String? = null
 )
 
 data class CreateUserResponse(
+    val success: Boolean? = true,
+    val message: String? = null,
     val id: Long,
     val username: String,
     val email: String,
@@ -184,6 +215,8 @@ data class CreateUserResponse(
     val lastName: String?,
     val phoneNumber: String?,
     val birthDate: String?,
+    val publicId: String? = null,  // 6 haneli public ID
     val points: Int,
-    val balance: Double
+    val balance: Double,
+    val city: String? = null
 ) 

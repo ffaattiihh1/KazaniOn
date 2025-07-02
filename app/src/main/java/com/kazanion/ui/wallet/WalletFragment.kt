@@ -70,7 +70,7 @@ class WalletFragment : Fragment() {
                             id = completedPoll.pollId.toInt(),
                             title = "Completed Poll ${completedPoll.pollId}",
                             description = "This poll was completed",
-                            points = 0,
+                            points = 0, // 0 puan (backward compatibility)
                             isActive = false,
                             locationBased = false,
                             latitude = null,

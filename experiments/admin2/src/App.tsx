@@ -15,6 +15,8 @@ import SecurityIcon from '@mui/icons-material/Security';
 import UserManagement from './pages/UserManagement';
 import ArticleIcon from '@mui/icons-material/Article';
 import StoryManagement from './pages/StoryManagement';
+import NotificationManagement from './pages/NotificationManagement';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const menuConfig = [
   {
@@ -28,6 +30,7 @@ const menuConfig = [
     icon: <SettingsIcon fontSize="large" />,
     submenu: [
       { label: 'Kullanıcı Yönetimi', icon: <GroupIcon />, path: '/users' },
+      { label: 'Bildirim Yönetimi', icon: <NotificationsIcon />, path: '/notifications' },
       { label: 'Ayarlar', icon: <SettingsIcon />, path: '/settings' },
     ],
   },
@@ -247,6 +250,7 @@ const App = () => {
               <Route path="/security" element={<SecuritySettings />} />
               <Route path="/logout" element={<Dashboard />} />
               <Route path="/users" element={<UserManagement />} />
+              <Route path="/notifications" element={<NotificationManagement />} />
               <Route path="/settings" element={<Typography variant="h6">Ayarlar (Demo)</Typography>} />
             </Routes>
           </Container>

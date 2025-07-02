@@ -1,102 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/white">
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:layout_marginVertical="4dp"
+    android:gravity="center_vertical"
+    android:background="@color/white">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+    <!-- Achievement Icon -->
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp">
 
-        <!-- Achievement Icon -->
-        <FrameLayout
+        <ImageView
+            android:id="@+id/imageViewAchievementIcon"
             android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_placeholder"/>
 
-            <ImageView
-                android:id="@+id/imageViewAchievementIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_placeholder"/>
+        <!-- Checkmark for completed achievements - MAVİ TİK -->
+        <ImageView
+            android:id="@+id/imageViewCheckmark"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_check_circle"
+            android:visibility="gone"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"/>
 
-            <!-- Checkmark for completed achievements -->
-            <ImageView
-                android:id="@+id/imageViewCheckmark"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="end|bottom"
-                android:src="@drawable/ic_check_circle"
-                android:visibility="gone"
-                android:padding="2dp"/>
+    </FrameLayout>
 
-        </FrameLayout>
+    <!-- Achievement Text -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
 
-        <!-- Achievement Text -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textViewAchievementTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
+            android:text="İlk Anket"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/textViewAchievementTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Başarım Başlığı"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textViewAchievementDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="İlk anketini tamamladın!"
+            android:textColor="@color/gray"
+            android:textSize="14sp"/>
 
-            <TextView
-                android:id="@+id/textViewAchievementDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Bu başarımı kazanmak için yapmanız gerekenler..."
-                android:textColor="@color/gray"
-                android:textSize="14sp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/textViewAchievementStatus"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tamamlanmadı"
-                    android:textColor="@color/secondary_dark"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-
-                <TextView
-                    android:id="@+id/textViewAchievementPoints"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="50 Puan (5 Coin)"
-                    android:textColor="@color/kazanion_blue"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textViewAchievementStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Tamamlanmadı"
+            android:textColor="@color/secondary_dark"
+            android:textSize="12sp"
+            android:textStyle="italic"/>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView> 
+    <!-- Points -->
+    <TextView
+        android:id="@+id/textViewAchievementPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100 Coin"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"/>
+
+</LinearLayout> 

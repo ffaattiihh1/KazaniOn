@@ -25,7 +25,6 @@ import com.kazanion.network.LocationPoll
 import com.kazanion.ui.locationpoll.LocationPollDetailBottomSheetFragment
 import com.kazanion.viewmodels.HomeViewModel
 import com.kazanion.viewmodels.AchievementViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 class HomeFragment : Fragment() {
 
@@ -75,14 +74,27 @@ class HomeFragment : Fragment() {
         binding.topUserInfoSection.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
         }
+        
+        // HARITADA KEŞFET - Bottom navigation'daki KEŞFET tab'ına git
         binding.buttonExploreOnMap.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_mapPollsFragment)
+            // MainActivity'de bottom navigation'a keşfet tab'ını seç
+            (requireActivity() as? com.kazanion.MainActivity)?.selectBottomTab(R.id.navigation_explore)
         }
+        
+        // CÜZDAN KARTI - Wallet'a git
         binding.walletCard.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_walletFragment)
         }
-         binding.textViewTumunuGor.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_pollsFragment)
+        
+        // CÜZDAN DETAYLAR BUTONU - Wallet'a git
+        binding.textViewWalletDetails.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_walletFragment)
+        }
+        
+        // TÜMÜNÜ GÖR - Bottom navigation'daki ANKETLER tab'ına git
+        binding.textViewTumunuGor.setOnClickListener {
+            // MainActivity'de bottom navigation'a anketler tab'ını seç
+            (requireActivity() as? com.kazanion.MainActivity)?.selectBottomTab(R.id.navigation_polls)
         }
     }
 
@@ -141,22 +153,20 @@ class HomeFragment : Fragment() {
 
         viewModel.userBalance.observe(viewLifecycleOwner) { balance ->
             balance?.let {
-                // Ana sayfa kullanıcı bilgileri
-                val displayName = if (!it.firstName.isNullOrBlank()) {
-                    it.firstName
-                } else {
-                    it.username
-                }
+                // Ana sayfa kullanıcı bilgileri - SADECE İSİM GÖSTERİLSİN
+                val displayName = getFirstNameFromStorage()  // HER ZAMAN SharedPreferences'dan al
+                
+                android.util.Log.d("HomeFragment", "🎯 Setting display name: '$displayName'")
                 binding.textViewUserName.text = displayName
                 binding.textViewBalance.text = String.format("₺%.2f", it.balance)
-                binding.textViewPoints.text = "${it.points} Puan >"
+                // PUAN > KALDIRILDI - artık gösterilmiyor
                 
                 // Cüzdan kartı bilgileri
                 binding.textViewWalletBalance.text = String.format("₺%.2f", it.balance)
                 binding.textViewWalletPoints.text = "${it.points} puan"
             } ?: run {
-                // Backend'den veri gelmezse Firebase'dan al
-                loadFirebaseUserData()
+                // Backend'den veri gelmezse default değerler
+                loadDefaultUserData()
             }
         }
 
@@ -217,6 +227,13 @@ class HomeFragment : Fragment() {
         val username = sharedPreferences.getString("username", "yeni_kullanici") ?: "yeni_kullanici"
         val userId = sharedPreferences.getString("userId", null)?.toLongOrNull()
         
+        // DEBUG - UserId kontrol et
+        android.util.Log.d("HomeFragment", "🔍 DEBUG: username='$username', userId=$userId")
+        android.util.Log.d("HomeFragment", "📱 SharedPreferences contents:")
+        sharedPreferences.all.forEach { (key, value) ->
+            android.util.Log.d("HomeFragment", "   $key = $value")
+        }
+        
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -232,6 +249,8 @@ class HomeFragment : Fragment() {
                 userId?.let { 
                     android.util.Log.d("HomeFragment", "Loading user ranking for userId: $it")
                     achievementViewModel.loadUserRanking(it) 
+                } ?: run {
+                    android.util.Log.w("HomeFragment", "⚠️ UserId is null! Cannot load user ranking")
                 }
             }.addOnFailureListener {
                  viewModel.loadAllData(username)
@@ -287,66 +306,57 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadFirebaseUserData() {
-        // Önce SharedPreferences'dan kontrol et
+    private fun getFirstNameFromStorage(): String {
         val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        
+        // DEBUG: Tüm değerleri kontrol et
+        android.util.Log.d("HomeFragment", "📋 getFirstNameFromStorage DEBUG:")
+        android.util.Log.d("HomeFragment", "   userDisplayName = '${sharedPreferences.getString("userDisplayName", "")}'")
+        android.util.Log.d("HomeFragment", "   firstName = '${sharedPreferences.getString("firstName", "")}'")
+        android.util.Log.d("HomeFragment", "   username = '${sharedPreferences.getString("username", "")}'")
+        
         val savedDisplayName = sharedPreferences.getString("userDisplayName", "")
-        val savedEmail = sharedPreferences.getString("userEmail", "")
+        val firstName = sharedPreferences.getString("firstName", "")
+        val username = sharedPreferences.getString("username", "")
         
-        if (!savedDisplayName.isNullOrEmpty()) {
-            android.util.Log.d("HomeFragment", "Loading from SharedPreferences...")
-            android.util.Log.d("HomeFragment", "  Display Name: $savedDisplayName")
-            android.util.Log.d("HomeFragment", "  Email: $savedEmail")
-            
-            val firstName = savedDisplayName.split(" ").firstOrNull() ?: savedEmail?.split("@")?.firstOrNull() ?: "Kullanıcı"
-            
-            // Ana sayfa bilgilerini SharedPreferences'dan güncelle
-            binding.textViewUserName.text = firstName
-            binding.textViewBalance.text = "₺0.00" // Default değer
-            binding.textViewPoints.text = "0 Puan >" // Default değer
-            
-            // Cüzdan kartı bilgileri
-            binding.textViewWalletBalance.text = "₺0.00"
-            binding.textViewWalletPoints.text = "0 puan"
-            
-            android.util.Log.d("HomeFragment", "SharedPreferences user name set to: $firstName")
-            return
-        }
-        
-        // SharedPreferences'da bilgi yoksa Firebase'dan dene
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val currentUser = firebaseAuth.currentUser
-        
-        if (currentUser != null) {
-            android.util.Log.d("HomeFragment", "Loading Firebase user data...")
-            android.util.Log.d("HomeFragment", "  Display Name: ${currentUser.displayName}")
-            android.util.Log.d("HomeFragment", "  Email: ${currentUser.email}")
-            
-            val displayName = currentUser.displayName ?: ""
-            val firstName = if (displayName.isNotEmpty()) {
-                displayName.split(" ").firstOrNull() ?: currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
-            } else {
-                currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
+        return when {
+            // 1. Önce userDisplayName'den sadece ilk ismi al
+            !savedDisplayName.isNullOrEmpty() -> {
+                val firstWord = savedDisplayName.split(" ").firstOrNull() ?: savedDisplayName
+                android.util.Log.d("HomeFragment", "✅ Using userDisplayName first word: '$firstWord'")
+                firstWord
             }
-            
-            // Ana sayfa bilgilerini Firebase'dan güncelle
-            binding.textViewUserName.text = firstName
-            binding.textViewBalance.text = "₺0.00" // Default değer
-            binding.textViewPoints.text = "0 Puan >" // Default değer
-            
-            // Cüzdan kartı bilgileri
-            binding.textViewWalletBalance.text = "₺0.00"
-            binding.textViewWalletPoints.text = "0 puan"
-            
-            android.util.Log.d("HomeFragment", "Firebase user name set to: $firstName")
-        } else {
-            // Firebase user da yoksa default değerler
-            binding.textViewUserName.text = "Kullanıcı"
-            binding.textViewBalance.text = "₺0.00"
-            binding.textViewPoints.text = "0 Puan >"
-            binding.textViewWalletBalance.text = "₺0.00"
-            binding.textViewWalletPoints.text = "0 puan"
+            // 2. Sonra firstName'i dene
+            !firstName.isNullOrEmpty() -> {
+                android.util.Log.d("HomeFragment", "✅ Using firstName: '$firstName'")
+                firstName
+            }
+            // 3. Son olarak username'i dene
+            !username.isNullOrEmpty() -> {
+                android.util.Log.d("HomeFragment", "✅ Using username: '$username'")
+                username
+            }
+            // 4. Hiçbiri yoksa default
+            else -> {
+                android.util.Log.d("HomeFragment", "⚠️ No name found, using default")
+                "Kullanıcı"
+            }
         }
+    }
+
+    private fun loadDefaultUserData() {
+        // SharedPreferences'dan fallback user data
+        val firstName = getFirstNameFromStorage()
+        
+        android.util.Log.d("HomeFragment", "🔄 Loading default user data with name: '$firstName'")
+        
+        // UI'ı hızlıca güncelle
+        binding.textViewUserName.text = firstName
+        binding.textViewBalance.text = "₺0.00"
+        // PUAN > KALDIRILDI - artık gösterilmiyor
+        
+        binding.textViewWalletBalance.text = "₺0.00"
+        binding.textViewWalletPoints.text = "0 puan"
     }
 
     override fun onDestroyView() {

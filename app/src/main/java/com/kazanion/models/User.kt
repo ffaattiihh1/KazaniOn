@@ -16,6 +16,8 @@ data class User(
     val phoneNumber: String? = null,
     @SerializedName("birthDate")
     val birthDate: String? = null,
+    @SerializedName("publicId")
+    val publicId: String? = null,  // 6 haneli public ID
     val points: Int = 0,
     val balance: Double = 0.0
 ) {

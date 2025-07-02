@@ -18,7 +18,6 @@ import com.kazanion.model.LeaderboardEntry
 import com.kazanion.viewmodels.AchievementViewModel
 import kotlinx.coroutines.launch
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 
 class AchievementsFragment : Fragment() {
 
@@ -26,6 +25,9 @@ class AchievementsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var apiService: ApiService
     private lateinit var achievementViewModel: AchievementViewModel
+    
+    // Leaderboard verileri
+    private var fullLeaderboardData: List<LeaderboardEntry> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,9 +51,10 @@ class AchievementsFragment : Fragment() {
         // Setup RecyclerViews
         binding.recyclerViewAchievements.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewLeaderboard.layoutManager = LinearLayoutManager(context)
-
-        binding.leaderboardCard.setOnClickListener {
-            findNavController().navigate(R.id.action_achievementsFragment_to_leaderboardFragment)
+        
+        // "Daha fazla" butonu click listener
+        binding.textViewShowMoreLeaderboard.setOnClickListener {
+            showFullLeaderboard()
         }
     }
 
@@ -63,10 +66,25 @@ class AchievementsFragment : Fragment() {
 
         achievementViewModel.leaderboard.observe(viewLifecycleOwner) { leaderboard ->
             android.util.Log.d("AchievementsFragment", "Leaderboard received: ${leaderboard?.size} entries")
-            val topLeaderboard = leaderboard?.take(10) ?: emptyList()
+            
+            fullLeaderboardData = leaderboard ?: emptyList()
+            
+            // İlk başta sadece top 3'ü göster
+            val displayData = fullLeaderboardData.take(3)  // İlk 3 kullanıcı
+            
             val currentUserId = getCurrentUserId()
-            val adapter = LeaderboardAdapter(topLeaderboard, currentUserId)
+            val adapter = LeaderboardAdapter(displayData, currentUserId)
             binding.recyclerViewLeaderboard.adapter = adapter
+            
+            // "Daha fazla" butonunu gizle/göster - 3'ten fazla kullanıcı varsa göster
+            binding.textViewShowMoreLeaderboard.visibility = 
+                if (fullLeaderboardData.size > 3) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+                
+            android.util.Log.d("AchievementsFragment", "📊 Leaderboard: ${fullLeaderboardData.size} users, showing ${displayData.size}, more button: ${binding.textViewShowMoreLeaderboard.visibility == View.VISIBLE}")
         }
 
         achievementViewModel.achievements.observe(viewLifecycleOwner) { achievements ->
@@ -89,11 +107,20 @@ class AchievementsFragment : Fragment() {
         val currentUserId = getCurrentUserId()
         android.util.Log.d("AchievementsFragment", "Loading data for userId: $currentUserId")
         
+        // DEBUG - SharedPreferences kontrol et
+        val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        android.util.Log.d("AchievementsFragment", "🔍 DEBUG SharedPreferences:")
+        sharedPreferences.all.forEach { (key, value) ->
+            android.util.Log.d("AchievementsFragment", "   $key = $value")
+        }
+        
         if (currentUserId != null) {
             achievementViewModel.loadUserRanking(currentUserId)
             achievementViewModel.loadUserAchievements(currentUserId)
+        } else {
+            android.util.Log.w("AchievementsFragment", "⚠️ UserId is null! Cannot load user data")
         }
-        achievementViewModel.loadLeaderboard(50)
+        achievementViewModel.loadLeaderboard(100)  // Daha fazla kullanıcı yükle
         achievementViewModel.loadAllAchievements()
         
         // Load user info for display
@@ -104,39 +131,38 @@ class AchievementsFragment : Fragment() {
         android.util.Log.d("AchievementsFragment", "Updating user ranking card: $ranking")
         
         if (ranking != null) {
-            binding.textViewUserRank.text = "#${ranking.rank}"
-            binding.textViewUserPoints.text = "${ranking.points} puan"
-            binding.textViewUserDisplayName.text = ranking.displayName
+            // YENİ TASARIM - Coin ve rank gösterimi
+            binding.textViewUserDisplayName.text = ranking.displayName ?: "Kullanıcı"
             
-            // Update rank circle color based on ranking
+            // GERÇEK COIN DEĞER - Points'den hesaplama
+            val coins = ranking.points / 10  // 10 puan = 1 coin
+            binding.textViewUserCoins.text = "$coins Coin"
+            
+            // Rank circle'ını güncelle
             when (ranking.badge) {
                 "gold" -> {
-                    binding.textViewUserRank.setBackgroundResource(R.drawable.gold_circle_background)
-                    binding.textViewUserRank.setTextColor(requireContext().getColor(android.R.color.black))
                     binding.textViewUserRank.text = "🥇"
+                    binding.textViewUserRank.setBackgroundResource(R.drawable.gold_circle_background)
                 }
                 "silver" -> {
-                    binding.textViewUserRank.setBackgroundResource(R.drawable.silver_circle_background)
-                    binding.textViewUserRank.setTextColor(requireContext().getColor(android.R.color.black))
                     binding.textViewUserRank.text = "🥈"
+                    binding.textViewUserRank.setBackgroundResource(R.drawable.silver_circle_background)
                 }
                 "bronze" -> {
-                    binding.textViewUserRank.setBackgroundResource(R.drawable.bronze_circle_background)
-                    binding.textViewUserRank.setTextColor(requireContext().getColor(android.R.color.black))
                     binding.textViewUserRank.text = "🥉"
+                    binding.textViewUserRank.setBackgroundResource(R.drawable.bronze_circle_background)
                 }
                 else -> {
-                    binding.textViewUserRank.setBackgroundResource(R.drawable.white_circle_background)
-                    binding.textViewUserRank.setTextColor(requireContext().getColor(android.R.color.black))
                     binding.textViewUserRank.text = "#${ranking.rank}"
+                    binding.textViewUserRank.setBackgroundResource(R.drawable.white_circle_background)
                 }
             }
+            
         } else {
             // No ranking data available
             binding.textViewUserRank.text = "#-"
             binding.textViewUserRank.setBackgroundResource(R.drawable.white_circle_background)
-            binding.textViewUserRank.setTextColor(requireContext().getColor(android.R.color.black))
-            binding.textViewUserPoints.text = "0 puan"
+            binding.textViewUserCoins.text = "0 Coin"
             binding.textViewUserDisplayName.text = getUserDisplayName()
         }
     }
@@ -152,33 +178,25 @@ class AchievementsFragment : Fragment() {
     }
 
     private fun getUserDisplayName(): String {
-        // Önce SharedPreferences'dan kontrol et
+        // Başarımlar sayfasında KULLANICI ADI göster
         val sharedPreferences = requireContext().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
-        val savedDisplayName = sharedPreferences.getString("userDisplayName", "")
-        val savedEmail = sharedPreferences.getString("userEmail", "")
+        val username = sharedPreferences.getString("username", "")
         
-        if (!savedDisplayName.isNullOrEmpty()) {
-            return savedDisplayName.split(" ").firstOrNull() ?: "Kullanıcı"
+        return if (!username.isNullOrEmpty()) {
+            username  // Kullanıcı adını döndür
+        } else {
+            "kullanici"
         }
-        
-        if (!savedEmail.isNullOrEmpty()) {
-            return savedEmail.split("@").firstOrNull() ?: "Kullanıcı"
+    }
+    
+    private fun showFullLeaderboard() {
+        // Tam sıralama sayfasına git
+        try {
+            findNavController().navigate(R.id.action_achievementsFragment_to_fullLeaderboardFragment)
+        } catch (e: Exception) {
+            android.util.Log.e("AchievementsFragment", "Navigation error: ${e.message}")
+            Toast.makeText(context, "Sıralama sayfası açılamıyor", Toast.LENGTH_SHORT).show()
         }
-        
-        // Firebase'dan dene
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val currentUser = firebaseAuth.currentUser
-        
-        if (currentUser != null) {
-            val displayName = currentUser.displayName ?: ""
-            return if (displayName.isNotEmpty()) {
-                displayName.split(" ").firstOrNull() ?: currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
-            } else {
-                currentUser.email?.split("@")?.firstOrNull() ?: "Kullanıcı"
-            }
-        }
-        
-        return "Kullanıcı"
     }
 
     override fun onDestroyView() {

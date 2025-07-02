@@ -39,13 +39,14 @@ interface Survey {
   id: number; // Changed from string to number for PostgreSQL
   title: string;
   description?: string;
-  points: number; // Changed from reward to match backend
+  price: number; // Anket fiyatı (TL)
   link?: string;
   locationBased: boolean; // Changed from type to match backend
   latitude?: number | null;
   longitude?: number | null;
   isActive: boolean; // Changed from status to match backend
   createdAt: string; // Backend returns ISO string
+  points?: number; // Calculated field from backend (price * 10)
 }
 
 const API_BASE_URL = 'https://kazanion.onrender.com/api';
@@ -87,8 +88,8 @@ const SurveyManagement = () => {
       setError('Konumlu anketler için haritadan bir konum seçmelisiniz!');
       return;
     }
-    if (!newSurvey.title || !newSurvey.points) {
-      setError('Anket eklenemedi: Başlık veya ödül miktarı eksik');
+    if (!newSurvey.title || !newSurvey.price) {
+      setError('Anket eklenemedi: Başlık veya fiyat eksik');
       return;
     }
 
@@ -97,7 +98,7 @@ const SurveyManagement = () => {
     const surveyData = {
       title: newSurvey.title,
       description: newSurvey.description || '',
-      points: Number(newSurvey.points),
+      price: Number(newSurvey.price),
       locationBased: newSurvey.locationBased || false,
       latitude: selectedLocation ? selectedLocation[0] : null,
       longitude: selectedLocation ? selectedLocation[1] : null,
@@ -159,7 +160,7 @@ const SurveyManagement = () => {
     const updateData = {
       title: editSurvey.title,
       description: editSurvey.description || '',
-      points: editSurvey.points,
+      price: editSurvey.price,
       locationBased: editSurvey.locationBased,
       latitude: editSurvey.latitude,
       longitude: editSurvey.longitude,
@@ -228,7 +229,7 @@ const SurveyManagement = () => {
               <TableRow>
                 <TableCell>Başlık</TableCell>
                 <TableCell>Tür</TableCell>
-                <TableCell>Ödül</TableCell>
+                <TableCell>Fiyat/Puan</TableCell>
                 <TableCell>Durum</TableCell>
                 <TableCell>Oluşturulma Tarihi</TableCell>
                 <TableCell>İşlemler</TableCell>
@@ -239,7 +240,7 @@ const SurveyManagement = () => {
                 <TableRow key={survey.id}>
                   <TableCell>{survey.title}</TableCell>
                   <TableCell>{survey.locationBased ? 'Konumlu' : 'Link'}</TableCell>
-                  <TableCell>{survey.points} TL</TableCell>
+                  <TableCell>{survey.price} TL ({(survey.price * 10)} puan)</TableCell>
                   <TableCell>{survey.isActive ? 'Aktif' : 'Pasif'}</TableCell>
                   <TableCell>{new Date(survey.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
@@ -331,9 +332,10 @@ const SurveyManagement = () => {
             <TextField
               fullWidth
               type="number"
-              label="Ödül Miktarı (TL)"
-              value={newSurvey.points || ''}
-              onChange={(e) => setNewSurvey({ ...newSurvey, points: Number(e.target.value) })}
+              label="Anket Fiyatı (TL)"
+              value={newSurvey.price || ''}
+              onChange={(e) => setNewSurvey({ ...newSurvey, price: Number(e.target.value) })}
+              helperText="1 TL = 10 puan. Örnek: 10 TL = 100 puan, 25 TL = 250 puan"
             />
           </Box>
         </DialogContent>
@@ -403,9 +405,10 @@ const SurveyManagement = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Ödül Miktarı (TL)"
-                value={editSurvey.points}
-                onChange={(e) => setEditSurvey({ ...editSurvey, points: Number(e.target.value) })}
+                label="Anket Fiyatı (TL)"
+                value={editSurvey.price}
+                onChange={(e) => setEditSurvey({ ...editSurvey, price: Number(e.target.value) })}
+                helperText="1 TL = 10 puan. Örnek: 10 TL = 100 puan, 25 TL = 250 puan"
               />
             </Box>
           )}

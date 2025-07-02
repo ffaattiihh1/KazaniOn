@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "194633260024",
-    "project_id": "kazanion-admin",
-    "storage_bucket": "kazanion-admin.firebasestorage.app"
+    "project_number": "123456789",
+    "project_id": "kazanion-app",
+    "storage_bucket": "kazanion-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:194633260024:android:365798c345752ace82540d",
+        "mobilesdk_app_id": "1:123456789:android:abcdef123456789",
         "android_client_info": {
           "package_name": "com.kazanion"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "123456789-abcdef123456789.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBGZhjk-MuJIM8_8WE1w9oN02WzvFhH0Xk"
+          "current_key": "AIzaSyAUdAIjhXMsRsmyiFuUtuNzVoaqQXsrS0I"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123456789-abcdef123456789.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kazanion.R
 import com.kazanion.model.LeaderboardEntry
@@ -18,6 +19,7 @@ class LeaderboardAdapter(
         val textViewRank: TextView = itemView.findViewById(R.id.textViewRank)
         val textViewDisplayName: TextView = itemView.findViewById(R.id.textViewDisplayName)
         val textViewPoints: TextView = itemView.findViewById(R.id.textViewPoints)
+        val textViewCoin: TextView = itemView.findViewById(R.id.textViewCoin)
         val imageBadge: ImageView = itemView.findViewById(R.id.imageBadge)
         val viewHighlight: View? = itemView.findViewById(R.id.viewHighlight)
     }
@@ -31,59 +33,48 @@ class LeaderboardAdapter(
         val entry = leaderboardEntries[position]
         val context = holder.itemView.context
         
-        // Rozet ve rank gösterimi
-        when (entry.badge) {
-            "gold" -> {
-                holder.textViewRank.text = "🥇"
-                holder.textViewRank.setTextColor(context.getColor(android.R.color.black))
-                holder.textViewRank.setBackgroundResource(R.drawable.gold_circle_background)
-                holder.imageBadge.setImageResource(R.drawable.ic_crown_gold)
-                holder.imageBadge.visibility = View.VISIBLE
-            }
-            "silver" -> {
-                holder.textViewRank.text = "🥈"
-                holder.textViewRank.setTextColor(context.getColor(android.R.color.black))
-                holder.textViewRank.setBackgroundResource(R.drawable.silver_circle_background)
-                holder.imageBadge.setImageResource(R.drawable.ic_crown_silver)
-                holder.imageBadge.visibility = View.VISIBLE
-            }
-            "bronze" -> {
-                holder.textViewRank.text = "🥉"
-                holder.textViewRank.setTextColor(context.getColor(android.R.color.black))
-                holder.textViewRank.setBackgroundResource(R.drawable.bronze_circle_background)
-                holder.imageBadge.setImageResource(R.drawable.ic_crown_bronze)
-                holder.imageBadge.visibility = View.VISIBLE
-            }
-            else -> {
-                holder.textViewRank.text = "#${entry.rank}"
-                holder.textViewRank.setTextColor(context.getColor(android.R.color.black))
-                holder.textViewRank.setBackgroundResource(R.drawable.white_circle_background)
-                holder.imageBadge.visibility = View.GONE
-            }
-        }
+        // Current user check (KENDİSİ MAVİ, DİĞERLERİ SİYAH)
+        val isCurrentUser = currentUserId != null && entry.id == currentUserId
         
-        // İsim ve puan
-        holder.textViewDisplayName.text = entry.displayName
-        holder.textViewPoints.text = "${entry.points} puan"
-        
-        // Eğer mevcut kullanıcı ise vurgula
-        if (currentUserId != null && entry.id == currentUserId) {
-            holder.viewHighlight?.visibility = View.VISIBLE
-            holder.itemView.setBackgroundColor(context.getColor(R.color.light_blue))
+        // Profile circle background - KENDİSİ MAVİ, DİĞERLERİ SİYAH
+        if (isCurrentUser) {
+            // KENDİSİ - MAVİ ARKA PLAN
+            holder.textViewRank.setBackgroundResource(R.drawable.circle_background_blue)
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue))
         } else {
-            holder.viewHighlight?.visibility = View.GONE
-            holder.itemView.setBackgroundColor(context.getColor(android.R.color.transparent))
+            // DİĞERLERİ - SİYAH ARKA PLAN
+            holder.textViewRank.setBackgroundResource(R.drawable.circle_background_dark)
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
         
-        // Animation for top 3
-        if (entry.rank <= 3) {
-            holder.itemView.alpha = 0f
-            holder.itemView.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .setStartDelay((position * 100).toLong())
-                .start()
+        // Profil resmi göster - Hashtag yerine profil ikonu
+        holder.textViewRank.text = "👤"  // Profil ikonu
+        
+        // Coin sistemi - 1. altın, 2. gümüş, 3. bronz, diğerleri mavi
+        when (entry.rank) {
+            1 -> holder.textViewCoin.text = "🥇"  // 1. sıra - ALTIN
+            2 -> holder.textViewCoin.text = "🥈"  // 2. sıra - GÜMÜŞ  
+            3 -> holder.textViewCoin.text = "🥉"  // 3. sıra - BRONZ
+            else -> holder.textViewCoin.text = "🔵"  // Diğerleri - MAVİ
         }
+        
+        holder.imageBadge.visibility = View.GONE
+        
+        // Display name with rank - "1. Sarah123" formatı
+        val username = when {
+            !entry.displayName.isNullOrBlank() -> entry.displayName
+            !entry.username.isNullOrBlank() -> entry.username  // Backend'ten username kullan
+            !entry.firstName.isNullOrBlank() -> entry.firstName // Veya firstName kullan
+            else -> "Kullanıcı"  // Son çare
+        }
+        holder.textViewDisplayName.text = "${entry.rank}. $username"
+        val coins = entry.points / 10  // 10 puan = 1 coin
+        holder.textViewPoints.text = "$coins"
+        
+        // Text color - İSİMLER SİYAH OLMALI
+        holder.textViewRank.setTextColor(ContextCompat.getColor(context, android.R.color.white))
+        holder.textViewDisplayName.setTextColor(ContextCompat.getColor(context, android.R.color.black))
+        holder.textViewPoints.setTextColor(ContextCompat.getColor(context, android.R.color.black))
     }
 
     override fun getItemCount() = leaderboardEntries.size

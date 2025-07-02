@@ -77,7 +77,16 @@
         <action
             android:id="@+id/action_achievementsFragment_to_leaderboardFragment"
             app:destination="@id/leaderboardFragment" />
+        <action
+            android:id="@+id/action_achievementsFragment_to_fullLeaderboardFragment"
+            app:destination="@id/fullLeaderboardFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fullLeaderboardFragment"
+        android:name="com.kazanion.ui.achievements.FullLeaderboardFragment"
+        android:label="Tam Sıralama"
+        tools:layout="@layout/fragment_full_leaderboard" />
 
     <fragment
         android:id="@+id/leaderboardFragment"
@@ -113,13 +122,11 @@
         android:label="RegisterFragment">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/registerFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_registerFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/registerFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 

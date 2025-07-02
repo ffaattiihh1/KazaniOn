@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.gms.google-services")
     id("kotlin-parcelize")
 }
 
@@ -23,13 +22,23 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "kazanion-key"
+            keyPassword = "kazanion123"
+            storeFile = file("kazanion-release-key.jks")
+            storePassword = "kazanion123"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     
@@ -81,12 +90,7 @@ dependencies {
     implementation("androidx.databinding:databinding-runtime:8.2.2")
     implementation("com.google.guava:guava:32.1.3-android")
 
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-storage")
+
 
     // Compose
     implementation("androidx.compose.ui:ui")
@@ -122,6 +126,11 @@ dependencies {
 
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Firebase - temporarily disabled for demo
+    // implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    // implementation("com.google.firebase:firebase-messaging-ktx")
+    // implementation("com.google.firebase:firebase-analytics-ktx")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

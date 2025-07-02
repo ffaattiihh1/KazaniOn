@@ -11,8 +11,10 @@ import com.kazanion.databinding.ListItemPollBinding
 import com.kazanion.model.Poll
 import com.kazanion.network.ApiService
 import com.kazanion.network.CompletePollRequest
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PollsAdapter(private var polls: List<Poll>) : RecyclerView.Adapter<PollsAdapter.PollViewHolder>() {
 
@@ -30,8 +32,11 @@ class PollsAdapter(private var polls: List<Poll>) : RecyclerView.Adapter<PollsAd
     override fun getItemCount(): Int = polls.size
 
     fun updatePolls(newPolls: List<Poll>) {
-        this.polls = newPolls
-        notifyDataSetChanged()
+        // DiffUtil kullanmak yerine basit kontrol - daha hızlı
+        if (this.polls != newPolls) {
+            this.polls = newPolls
+            notifyDataSetChanged()
+        }
     }
 
     inner class PollViewHolder(private val binding: ListItemPollBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -69,31 +74,26 @@ class PollsAdapter(private var polls: List<Poll>) : RecyclerView.Adapter<PollsAd
         }
 
         private fun completePoll(poll: Poll) {
-            // Geçici olarak sabit kullanıcı adı kullanıyoruz
             val username = "yeni_kullanici"
             
-            // Kullanıcı ID'sini al ve anketi tamamla
-            GlobalScope.launch {
+            // Memory leak'i önlemek için IO scope kullan
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val user = apiService.getUserByUsername(username)
                     val request = CompletePollRequest(user.id)
                     val response = apiService.completePoll(poll.id.toLong(), request)
                     
-                    if (response.success) {
-                        // UI thread'de Toast göster
-                        (itemView.context as? android.app.Activity)?.runOnUiThread {
-                            Toast.makeText(itemView.context, "Anket başarıyla tamamlandı! ${response.pointsEarned} puan kazandınız.", Toast.LENGTH_SHORT).show()
-                        }
-                        
-                        // Başarımları kontrol et
-                        checkAchievements(user.id)
-                    } else {
-                        (itemView.context as? android.app.Activity)?.runOnUiThread {
+                    // UI güncellemelerini Main thread'de yap
+                    withContext(Dispatchers.Main) {
+                        if (response.success) {
+                            Toast.makeText(itemView.context, "Anket tamamlandı! ${response.pointsEarned} puan kazandınız.", Toast.LENGTH_SHORT).show()
+                            checkAchievements(user.id)
+                        } else {
                             Toast.makeText(itemView.context, "Anket tamamlanamadı: ${response.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } catch (e: Exception) {
-                    (itemView.context as? android.app.Activity)?.runOnUiThread {
+                    withContext(Dispatchers.Main) {
                         Toast.makeText(itemView.context, "Ağ hatası: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -101,12 +101,12 @@ class PollsAdapter(private var polls: List<Poll>) : RecyclerView.Adapter<PollsAd
         }
 
         private fun checkAchievements(userId: Long) {
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val achievements = apiService.checkAchievements(userId)
                     if (achievements.isNotEmpty()) {
                         val achievementMessages = achievements.values.joinToString("\n")
-                        (itemView.context as? android.app.Activity)?.runOnUiThread {
+                        withContext(Dispatchers.Main) {
                             Toast.makeText(itemView.context, "Yeni başarımlar kazandınız!\n$achievementMessages", Toast.LENGTH_LONG).show()
                         }
                     }

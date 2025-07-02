@@ -81,4 +81,7 @@
     <color name="light_gray">#F5F5F5</color>
     <color name="dark_gray">#666666</color>
     <color name="light_blue">#E3F2FD</color>
+    
+    <!-- Firebase notification colors -->
+    <color name="purple_500">#9C27B0</color>
 </resources>

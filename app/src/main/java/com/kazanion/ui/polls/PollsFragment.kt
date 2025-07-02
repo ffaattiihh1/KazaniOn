@@ -20,6 +20,13 @@ class PollsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var pollsAdapter: PollsAdapter
     private lateinit var apiService: ApiService
+    
+    // CACHE - Sayfa değişiminde hızlı açılması için
+    companion object {
+        private var cachedPolls: List<Poll>? = null
+        private var lastLoadTime: Long = 0
+        private const val CACHE_TIMEOUT = 60 * 1000L // 1 dakika cache
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,86 +41,50 @@ class PollsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         apiService = ApiService.create()
         binding.recyclerViewPolls.layoutManager = LinearLayoutManager(requireContext())
-        pollsAdapter = PollsAdapter(emptyList())
-        binding.recyclerViewPolls.adapter = pollsAdapter
-        loadLinkPolls()
+        
+        // ÖNCE CACHE KONTROL ET - HIZLI GÖSTERİM!
+        val currentTime = System.currentTimeMillis()
+        val cacheValid = cachedPolls != null && (currentTime - lastLoadTime) < CACHE_TIMEOUT
+        
+        if (cacheValid) {
+            android.util.Log.d("PollsFragment", "✅ CACHE kullanılıyor - Hızlı açılış!")
+            pollsAdapter = PollsAdapter(cachedPolls!!)
+            binding.recyclerViewPolls.adapter = pollsAdapter
+            binding.cardViewNoPolls.visibility = if (cachedPolls!!.isEmpty()) View.VISIBLE else View.GONE
+        } else {
+            android.util.Log.d("PollsFragment", "🔄 Cache yok, API'den yükleniyor...")
+            pollsAdapter = PollsAdapter(emptyList())
+            binding.recyclerViewPolls.adapter = pollsAdapter
+            loadLinkPolls()
+        }
     }
 
     private fun loadLinkPolls() {
-        android.util.Log.d("PollsFragment", "=== LOADING LINK POLLS ===")
+        android.util.Log.d("PollsFragment", "Loading polls from API...")
         
-        // Loading state göster
         if (_binding != null && isAdded) {
             binding.cardViewNoPolls.visibility = View.GONE
-            // TODO: Loading animation ekle
         }
         
         lifecycleScope.launch {
             try {
-                android.util.Log.d("PollsFragment", "Calling getActiveLinkPolls API...")
-                val polls = apiService.getActiveLinkPolls()
-                android.util.Log.d("PollsFragment", "✅ SUCCESS: Received polls count: ${polls.size}")
-                polls.forEachIndexed { index, poll ->
-                    android.util.Log.d("PollsFragment", "Poll $index: ${poll.title} - Link: ${poll.link}")
-                }
+                val polls = apiService.getAllPolls()
+                android.util.Log.d("PollsFragment", "✅ Received ${polls.size} polls")
                 
-                // Fragment hala aktif mi kontrol et
+                // CACHE'E KAYDET
+                cachedPolls = polls
+                lastLoadTime = System.currentTimeMillis()
+                
                 if (_binding != null && isAdded) {
                     pollsAdapter = PollsAdapter(polls)
                     binding.recyclerViewPolls.adapter = pollsAdapter
-                    if (polls.isEmpty()) {
-                        android.util.Log.d("PollsFragment", "No polls found - showing empty view")
-                        binding.cardViewNoPolls.visibility = View.VISIBLE
-                    } else {
-                        android.util.Log.d("PollsFragment", "✅ Polls loaded successfully - hiding empty view")
-                        binding.cardViewNoPolls.visibility = View.GONE
-                    }
-                } else {
-                    android.util.Log.d("PollsFragment", "Fragment not active, skipping UI update")
+                    binding.cardViewNoPolls.visibility = if (polls.isEmpty()) View.VISIBLE else View.GONE
                 }
             } catch (e: Exception) {
-                android.util.Log.e("PollsFragment", "=== POLLS API ERROR ===")
-                android.util.Log.e("PollsFragment", "Error Type: ${e.javaClass.simpleName}")
-                android.util.Log.e("PollsFragment", "Error Message: ${e.message}")
-                android.util.Log.e("PollsFragment", "Stack Trace:", e)
+                android.util.Log.e("PollsFragment", "Error loading polls", e)
                 
-                var userMessage = "Anketler yüklenirken hata oluştu"
-                
-                // HTTP error ise detaylı bilgi
-                if (e is retrofit2.HttpException) {
-                    android.util.Log.e("PollsFragment", "HTTP Status Code: ${e.code()}")
-                    android.util.Log.e("PollsFragment", "HTTP Error Body: ${e.response()?.errorBody()?.string()}")
-                    userMessage = "Sunucu hatası (${e.code()})"
-                }
-                
-                // Timeout error ise - Backend uyuyor
-                if (e is java.net.SocketTimeoutException) {
-                    android.util.Log.e("PollsFragment", "⚠️ TIMEOUT ERROR - Backend probably sleeping!")
-                    userMessage = "Sunucu uyandırılıyor, lütfen tekrar deneyin..."
-                    
-                    // 3 saniye sonra otomatik retry
-                    lifecycleScope.launch {
-                        kotlinx.coroutines.delay(3000)
-                        if (_binding != null && isAdded) {
-                            android.util.Log.d("PollsFragment", "🔄 Auto-retrying after timeout...")
-                            loadLinkPolls()
-                        }
-                    }
-                }
-                
-                // Network error ise
-                if (e is java.net.UnknownHostException || e is java.net.ConnectException) {
-                    userMessage = "İnternet bağlantısını kontrol edin"
-                }
-                
-                android.util.Log.e("PollsFragment", "👤 User message: $userMessage")
-                
-                // Fragment hala aktif mi kontrol et
                 if (_binding != null && isAdded) {
                     binding.cardViewNoPolls.visibility = View.VISIBLE
-                    // TODO: Error message'ı UI'da göster
-                } else {
-                    android.util.Log.d("PollsFragment", "Fragment not active, skipping error UI update")
                 }
             }
         }

@@ -9,7 +9,8 @@ data class LocationPoll(
     val id: Long,
     val title: String,
     val description: String,
-    val points: Int,
+    val points: Int = 0,       // Backend'den gelen puan değeri
+    val price: Double? = null, // Admin panel için (opsiyonel)
     val link: String?,
     val latitude: Double?,
     val longitude: Double?,

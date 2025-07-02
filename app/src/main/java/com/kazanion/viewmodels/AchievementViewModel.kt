@@ -76,11 +76,35 @@ class AchievementViewModel : ViewModel() {
                 _isLoading.value = true
                 Log.d("AchievementViewModel", "Loading leaderboard with limit: $limit")
                 
-                val leaderboardList = apiService.getLeaderboard(limit)
-                _leaderboard.value = leaderboardList
+                val rawLeaderboardList = apiService.getLeaderboard(limit)
                 
-                Log.d("AchievementViewModel", "Loaded ${leaderboardList.size} leaderboard entries")
-                leaderboardList.forEachIndexed { index, entry ->
+                // Backend response'unu düzenle - rank ve badge ekle
+                val processedLeaderboard = rawLeaderboardList.mapIndexed { index, entry ->
+                    val rank = index + 1
+                    val badge = when (rank) {
+                        1 -> "gold"
+                        2 -> "silver"
+                        3 -> "bronze"
+                        else -> null
+                    }
+                    val displayName = entry.username ?: entry.firstName ?: "Kullanıcı $rank"
+                    
+                    LeaderboardEntry(
+                        id = entry.id,
+                        rank = rank,
+                        displayName = displayName,
+                        username = entry.username,
+                        firstName = entry.firstName,
+                        lastName = entry.lastName,
+                        points = entry.points,
+                        badge = badge
+                    )
+                }
+                
+                _leaderboard.value = processedLeaderboard
+                
+                Log.d("AchievementViewModel", "Processed ${processedLeaderboard.size} leaderboard entries")
+                processedLeaderboard.take(5).forEach { entry ->
                     Log.d("AchievementViewModel", "Rank ${entry.rank}: ${entry.displayName} - ${entry.points} points, badge: ${entry.badge}")
                 }
             } catch (e: Exception) {
