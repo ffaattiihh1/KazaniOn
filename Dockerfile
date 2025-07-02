@@ -1,34 +1,28 @@
-# Build stage
-FROM node:18-alpine as build
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY experiments/admin2/package*.json ./
+# Copy KazaniOnBackend project files
+COPY KazaniOnBackend/ .
 
-# Install dependencies and missing types
-RUN npm install --omit=dev && npm install --save-dev @types/leaflet
+# Make gradlew executable and build
+RUN chmod +x gradlew && ./gradlew build -x test
 
-# Copy source code
-COPY experiments/admin2/src ./src
-COPY experiments/admin2/public ./public
-COPY experiments/admin2/tsconfig.json ./
-COPY experiments/admin2/nginx.conf ./
+# Create startup script for Render.com
+RUN echo '#!/bin/bash' > /app/start.sh && \
+    echo 'echo "🚀 Starting KazaniOn Backend..."' >> /app/start.sh && \
+    echo 'echo "📡 Port: ${PORT:-8081}"' >> /app/start.sh && \
+    echo 'echo "🗄️ Database: ${DATABASE_URL}"' >> /app/start.sh && \
+    echo 'echo "🔧 Spring Profile: production"' >> /app/start.sh && \
+    echo 'exec java -Xmx512m -Dspring.profiles.active=production -Dserver.port=${PORT:-8081} -jar build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar' >> /app/start.sh && \
+    chmod +x /app/start.sh
 
-# Build the application
-RUN npm run build
+# Health check for Render.com
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-8081}/actuator/health || exit 1
 
-# Production stage
-FROM nginx:alpine
+# Set environment for production
+ENV SPRING_PROFILES_ACTIVE=production
 
-# Copy built app from build stage
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy nginx configuration from build stage
-COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"] 
+# Run the startup script
+CMD ["/app/start.sh"] 
