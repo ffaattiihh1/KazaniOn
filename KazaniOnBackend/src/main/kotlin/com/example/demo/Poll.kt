@@ -15,8 +15,8 @@ data class Poll(
     @Column(nullable = false)
     val description: String,
     
-    @Column(nullable = true) // Allow null values for now to fix the database error
-    val price: Double? = null,
+    @Column(nullable = false) // No longer nullable since we fix null values on startup
+    val price: Double = 0.0,
     
     @Column(nullable = false)
     val points: Int = 0,

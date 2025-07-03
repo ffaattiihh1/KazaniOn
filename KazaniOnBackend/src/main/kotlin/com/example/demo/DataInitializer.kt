@@ -1,64 +1,52 @@
 package com.example.demo
 
-import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 
 @Component
-class DataInitializer : CommandLineRunner {
+class DataInitializer {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
+    @EventListener(ApplicationReadyEvent::class)
     @Transactional
-    override fun run(vararg args: String?) {
+    fun onApplicationReady() {
         try {
-            println("🔧 Fixing null price values in poll table...")
+            println("🔧 Checking and fixing null price values in poll table...")
             
-            // Update null price values to 0.0
-            val updateQuery = entityManager.createNativeQuery("UPDATE poll SET price = 0.0 WHERE price IS NULL")
-            val updatedRows = updateQuery.executeUpdate()
+            // First check if poll table exists and has null values
+            val checkQuery = entityManager.createNativeQuery("SELECT COUNT(*) FROM poll WHERE price IS NULL")
+            val nullCount = (checkQuery.singleResult as Number).toLong()
             
-            println("✅ Updated $updatedRows rows with null price values")
-            
-            // Also create some sample polls if the table is empty
-            val countQuery = entityManager.createNativeQuery("SELECT COUNT(*) FROM poll")
-            val count = (countQuery.singleResult as Number).toLong()
-            
-            if (count == 0L) {
-                println("📊 Creating sample polls...")
-                createSamplePolls()
+            if (nullCount > 0) {
+                println("⚠️ Found $nullCount polls with null price values, fixing...")
+                
+                // Update null price values to 0.0
+                val updateQuery = entityManager.createNativeQuery("UPDATE poll SET price = 0.0 WHERE price IS NULL")
+                val updatedRows = updateQuery.executeUpdate()
+                
+                println("✅ Successfully updated $updatedRows polls with default price value (0.0)")
             } else {
-                println("📊 Poll table already has $count polls")
+                println("✅ No null price values found in poll table")
+            }
+            
+            // Also ensure price column is NOT NULL for future entries
+            try {
+                val alterQuery = entityManager.createNativeQuery("ALTER TABLE poll ALTER COLUMN price SET NOT NULL")
+                alterQuery.executeUpdate()
+                println("✅ Set price column to NOT NULL")
+            } catch (e: Exception) {
+                println("ℹ️ Price column constraint already exists or modification not needed: ${e.message}")
             }
             
         } catch (e: Exception) {
-            println("⚠️ Error during data initialization: ${e.message}")
-            // Don't throw the exception to prevent app startup failure
-        }
-    }
-    
-    private fun createSamplePolls() {
-        val samplePolls = listOf(
-            "INSERT INTO poll (title, description, price, points, is_active, created_at) VALUES " +
-                    "('Sample Poll 1', 'This is a sample poll', 0.0, 10, true, NOW())",
-            
-            "INSERT INTO poll (title, description, price, points, is_active, created_at, link_url) VALUES " +
-                    "('Link Poll', 'Complete this online survey', 0.0, 15, true, NOW(), 'https://example.com/survey')",
-            
-            "INSERT INTO poll (title, description, price, points, is_active, created_at, latitude, longitude, radius) VALUES " +
-                    "('Location Poll', 'Complete this poll at the specified location', 0.0, 20, true, NOW(), 40.7128, -74.0060, 500.0)"
-        )
-        
-        samplePolls.forEach { sql ->
-            try {
-                entityManager.createNativeQuery(sql).executeUpdate()
-                println("✅ Sample poll created")
-            } catch (e: Exception) {
-                println("⚠️ Error creating sample poll: ${e.message}")
-            }
+            println("❌ Error fixing poll price values: ${e.message}")
+            // Don't throw the exception to prevent application startup failure
         }
     }
 } 
