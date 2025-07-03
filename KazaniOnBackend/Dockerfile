@@ -14,7 +14,7 @@ RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'echo "📡 Port: ${PORT:-8081}"' >> /app/start.sh && \
     echo 'echo "🗄️ Database: ${DATABASE_URL}"' >> /app/start.sh && \
     echo 'echo "🔧 Spring Profile: production"' >> /app/start.sh && \
-    echo 'exec java -Xmx512m -Dspring.profiles.active=production -Dserver.port=${PORT:-8081} -jar build/libs/KazaniOnBackend-0.0.1-SNAPSHOT.jar' >> /app/start.sh && \
+    echo 'exec java -Xmx512m -Dspring.profiles.active=production -Dserver.port=${PORT:-8081} -jar build/libs/demo-0.0.1-SNAPSHOT.jar' >> /app/start.sh && \
     chmod +x /app/start.sh
 
 # Health check for Render.com
