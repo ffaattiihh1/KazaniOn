@@ -10,13 +10,13 @@ data class Poll(
     val id: Long = 0,
     
     @Column(nullable = false)
-    val title: String,
+    val title: String = "",
     
     @Column(nullable = false)
-    val description: String,
+    val description: String = "",
     
-    @Column(nullable = false) // No longer nullable since we fix null values on startup
-    val price: Double = 0.0,
+    @Column(nullable = true) // Make nullable to handle existing null values
+    val price: Double? = null,
     
     @Column(nullable = false)
     val points: Int = 0,
@@ -30,5 +30,11 @@ data class Poll(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val radius: Double? = null,
-    val linkUrl: String? = null
+    val linkUrl: String? = null,
+    val imageUrl: String? = null,
+    val categoryId: Long? = null,
+    val requiredLevel: Int = 1,
+    val maxCompletions: Int? = null,
+    val startDate: LocalDateTime? = null,
+    val endDate: LocalDateTime? = null
 ) 
