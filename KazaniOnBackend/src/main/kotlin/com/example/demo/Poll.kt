@@ -33,7 +33,7 @@ data class Poll(
     val linkUrl: String? = null,
     val imageUrl: String? = null,
     val categoryId: Long? = null,
-    val requiredLevel: Int = 1,
+    val requiredLevel: Int? = 1,
     val maxCompletions: Int? = null,
     val startDate: LocalDateTime? = null,
     val endDate: LocalDateTime? = null
