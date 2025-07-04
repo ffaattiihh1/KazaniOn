@@ -31,7 +31,7 @@ class PollController(private val pollRepository: PollRepository) {
                 id = poll.id,
                 title = poll.title,
                 description = poll.description,
-                points = poll.points,
+                points = poll.points ?: 0,
                 latitude = poll.latitude ?: 0.0,
                 longitude = poll.longitude ?: 0.0,
                 radius = poll.radius ?: 1000.0
@@ -99,7 +99,7 @@ class PollController(private val pollRepository: PollRepository) {
         // For now, just return success
         return ResponseEntity.ok(CompletePollResponse(
             success = true,
-            pointsEarned = poll.points,
+            pointsEarned = poll.points ?: 0,
             message = "Poll completed successfully!"
         ))
     }

@@ -18,8 +18,8 @@ data class Poll(
     @Column(nullable = true) // Make nullable to handle existing null values
     val price: Double? = null,
     
-    @Column(nullable = false)
-    val points: Int = 0,
+    @Column(nullable = true)
+    val points: Int? = 0,
     
     @Column(nullable = false)
     val isActive: Boolean = true,
