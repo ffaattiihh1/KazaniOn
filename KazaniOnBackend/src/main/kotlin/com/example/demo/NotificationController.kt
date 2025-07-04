@@ -63,4 +63,38 @@ class NotificationController(private val notificationService: NotificationServic
     @GetMapping
     fun getAllNotifications(): ResponseEntity<List<Notification>> =
         ResponseEntity.ok(notificationService.getAllNotifications())
+
+    @GetMapping("/user/{userId}/unread")
+    fun getUserUnreadNotifications(@PathVariable userId: Long): ResponseEntity<Map<String, Any>> {
+        try {
+            // For now, return all notifications as unread (since we don't have user-specific tracking yet)
+            // This is a simplified implementation
+            val allNotifications = notificationService.getAllNotifications()
+            
+            // Simulate unread notifications (in a real app, you'd track read status per user)
+            val notifications = allNotifications.map { notification ->
+                mapOf(
+                    "id" to notification.id,
+                    "title" to notification.title,
+                    "message" to notification.message,
+                    "createdAt" to notification.createdAt.toString(),
+                    "isRead" to false,
+                    "isGlobal" to true
+                )
+            }
+            
+            return ResponseEntity.ok(mapOf(
+                "success" to true,
+                "notifications" to notifications,
+                "unreadCount" to notifications.size
+            ))
+        } catch (e: Exception) {
+            return ResponseEntity.ok(mapOf(
+                "success" to false,
+                "message" to "Failed to get notifications: ${e.message}",
+                "notifications" to emptyList<Map<String, Any>>(),
+                "unreadCount" to 0
+            ))
+        }
+    }
 } 
